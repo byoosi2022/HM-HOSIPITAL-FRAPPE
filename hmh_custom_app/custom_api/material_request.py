@@ -15,7 +15,7 @@ def get_average_consumption(item_code, warehouse):
 
     total_qty = frappe.db.sql("""
         SELECT SUM(actual_qty) 
-        FROM `tabStock Ledger Entry` 
+        FROM `tabStock Ledger Entry`
         WHERE item_code = %s 
         AND warehouse = %s 
         AND posting_date BETWEEN %s AND %s

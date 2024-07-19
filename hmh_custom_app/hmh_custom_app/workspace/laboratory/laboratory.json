@@ -1,0 +1,74 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"gQNZVfxwaJ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Laboratory</b></span>\",\"col\":12}},{\"id\":\"qEFDS-FQew\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lab Test\",\"col\":3}},{\"id\":\"FgBKfgJn2E\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sample Collection\",\"col\":3}},{\"id\":\"zGuZ5vHE06\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Laboratory Setup</span>\",\"col\":12}},{\"id\":\"AnJvlAMUIG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lab Test Template\",\"col\":3}},{\"id\":\"PbDoVGrF6Y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lab Test Uom\",\"col\":3}},{\"id\":\"lGZsf2oDAg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Lab Test Sample\",\"col\":3}}]",
+ "creation": "2024-07-19 15:30:27.752035",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "shortcut",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Laboratory",
+ "links": [],
+ "modified": "2024-07-19 16:06:35.840066",
+ "modified_by": "Administrator",
+ "module": "HMH CUSTOM APP",
+ "name": "Laboratory",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "Home",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Laboratory User"
+  }
+ ],
+ "sequence_id": 39.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lab Test Template",
+   "link_to": "Lab Test Template",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Sample Collection",
+   "link_to": "Sample Collection",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lab Test",
+   "link_to": "Lab Test",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lab Test Uom",
+   "link_to": "Lab Test UOM",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Lab Test Sample",
+   "link_to": "Lab Test Sample",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Laboratory"
+}
