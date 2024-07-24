@@ -1,15 +1,22 @@
 import frappe
 from frappe import _
 from frappe.utils import today, add_days
+
 @frappe.whitelist()
 def get_actual_qty(item_code, warehouse):
+    """
+    Get the actual quantity of an item in a specified warehouse.
+    """
     actual_qty = frappe.db.get_value('Bin', {'item_code': item_code, 'warehouse': warehouse}, 'actual_qty')
     if actual_qty is None:
         actual_qty = 0
     return actual_qty
 
 @frappe.whitelist()
-def get_average_consumption(item_code, warehouse):
+def get_total_qty_consumed(item_code, warehouse):
+    """
+    Get the total quantity consumed of an item in a specified warehouse over the past 30 days.
+    """
     end_date = today()
     start_date = add_days(end_date, -30)
 
@@ -22,11 +29,9 @@ def get_average_consumption(item_code, warehouse):
         AND actual_qty < 0
     """, (item_code, warehouse, start_date, end_date))
 
-    if total_qty and total_qty[0][0]:
-        total_qty = abs(total_qty[0][0])
-        average_consumption = total_qty
+    if total_qty and total_qty[0][0] is not None:
+        total_qty_consumed = abs(total_qty[0][0])
     else:
-        average_consumption = 0
+        total_qty_consumed = 0
 
-    return average_consumption
-
+    return total_qty_consumed
