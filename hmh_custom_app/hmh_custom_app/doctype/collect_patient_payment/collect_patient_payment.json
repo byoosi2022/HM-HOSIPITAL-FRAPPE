@@ -12,28 +12,28 @@
   "posting_date",
   "posting_time",
   "customer_group",
-  "due_date",
-  "patient_mrno",
-  "price_list",
+  "cost_center",
   "column_break_dfrw",
   "naming_series",
+  "due_date",
   "doctor_name",
+  "patient_mrno",
+  "price_list",
   "bill_status",
-  "cash",
-  "paid_amount_cash",
-  "mtn_mobile_money",
-  "paid_amount_mm",
-  "transaction_mtn",
-  "paid_amount_amm",
-  "paid_amount_airtel",
-  "transaction_airtel",
   "section_break_gerj",
   "items",
   "section_break_bovk",
   "total_qty",
+  "discount",
   "column_break_pxrv",
   "grand_totals",
-  "amended_from"
+  "discount_account",
+  "amended_from",
+  "payments_tab",
+  "cash_items",
+  "total_paid_amount",
+  "company",
+  "patient_id"
  ],
  "fields": [
   {
@@ -79,7 +79,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Bill Status",
-   "options": "\nOPEN\nCLOSED"
+   "options": "\nOPEN\nCLOSED",
+   "read_only": 1
   },
   {
    "fieldname": "total_qty",
@@ -138,60 +139,6 @@
    "options": "Customer Group"
   },
   {
-   "allow_on_submit": 1,
-   "default": "0",
-   "fieldname": "cash",
-   "fieldtype": "Check",
-   "label": "Cash",
-   "options": "Mode of Payment"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "paid_amount_cash",
-   "fieldtype": "Currency",
-   "label": "Paid Amount"
-  },
-  {
-   "allow_on_submit": 1,
-   "default": "0",
-   "fieldname": "mtn_mobile_money",
-   "fieldtype": "Check",
-   "label": "MTN Mobile Money",
-   "options": "Mode of Payment"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "paid_amount_mm",
-   "fieldtype": "Currency",
-   "label": "Paid Amount"
-  },
-  {
-   "allow_on_submit": 1,
-   "default": "0",
-   "fieldname": "paid_amount_amm",
-   "fieldtype": "Check",
-   "label": "Airtel Mobile Money",
-   "options": "Mode of Payment"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "paid_amount_airtel",
-   "fieldtype": "Currency",
-   "label": "Paid Amount"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "transaction_airtel",
-   "fieldtype": "Data",
-   "label": "Transaction ID"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "transaction_mtn",
-   "fieldtype": "Data",
-   "label": "Transaction ID"
-  },
-  {
    "fieldname": "patient_mrno",
    "fieldtype": "Data",
    "label": "Patient MRNO"
@@ -212,12 +159,61 @@
    "fieldtype": "Link",
    "label": "Price List",
    "options": "Price List"
+  },
+  {
+   "fieldname": "payments_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payments"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "cash_items",
+   "fieldtype": "Table",
+   "label": "Cash Items",
+   "options": "Modes of Payment Items"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_paid_amount",
+   "fieldtype": "Currency",
+   "label": "Total Paid Amount"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "discount",
+   "fieldtype": "Currency",
+   "label": "Discount"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "discount_account",
+   "fieldtype": "Link",
+   "label": "Discount Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "patient_id",
+   "fieldtype": "Link",
+   "label": "Patient ID",
+   "options": "Patient"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-07-23 16:51:10.844567",
+ "modified": "2024-07-26 19:35:11.866756",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Collect Patient Payment",

@@ -1,0 +1,193 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-07-25 16:36:35.969046",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "patient_name",
+  "full_age",
+  "gender",
+  "patient_phone",
+  "nin_no",
+  "column_break_ldgz",
+  "date",
+  "time",
+  "nok_relationship",
+  "nok_first_name",
+  "nok_second_name",
+  "nok_phone",
+  "residence_tab",
+  "country",
+  "district",
+  "subcounty",
+  "column_break_hous",
+  "village",
+  "parish",
+  "customer_details_tab",
+  "customer_group",
+  "customer",
+  "column_break_lxif",
+  "default_price_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name"
+  },
+  {
+   "fieldname": "patient_phone",
+   "fieldtype": "Data",
+   "label": "Patient Phone"
+  },
+  {
+   "fieldname": "nok_relationship",
+   "fieldtype": "Data",
+   "label": "NOK Relationship"
+  },
+  {
+   "fieldname": "nok_first_name",
+   "fieldtype": "Data",
+   "label": "NOK First Name"
+  },
+  {
+   "fieldname": "nok_second_name",
+   "fieldtype": "Data",
+   "label": "NOK Second Name "
+  },
+  {
+   "fieldname": "nok_phone",
+   "fieldtype": "Data",
+   "label": "NOK Phone"
+  },
+  {
+   "fieldname": "column_break_ldgz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "full_age",
+   "fieldtype": "Int",
+   "label": "Full Age"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nMale\nFemale"
+  },
+  {
+   "default": "now",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "default": "now",
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "label": "time"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Patient MRNO",
+   "options": "HMHCA-PID-.YYYY.-"
+  },
+  {
+   "fieldname": "village",
+   "fieldtype": "Data",
+   "label": "Village"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Data",
+   "label": "District"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "residence_tab",
+   "fieldtype": "Tab Break",
+   "label": "Residence"
+  },
+  {
+   "fieldname": "nin_no",
+   "fieldtype": "Data",
+   "label": "NIN NO"
+  },
+  {
+   "fieldname": "customer_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Customer Details "
+  },
+  {
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "label": "Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "default_price_list",
+   "fieldtype": "Link",
+   "label": "Default Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "column_break_lxif",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hous",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "subcounty",
+   "fieldtype": "Data",
+   "label": "Subcounty"
+  },
+  {
+   "fieldname": "parish",
+   "fieldtype": "Data",
+   "label": "Parish"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-25 18:15:16.474646",
+ "modified_by": "Administrator",
+ "module": "HMH CUSTOM APP",
+ "name": "Patient Registration Identification",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

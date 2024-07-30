@@ -13,6 +13,9 @@ app_license = "mit"
 # app_include_css = "/assets/hmh_custom_app/css/hmh_custom_app.css"
 app_include_js = "/assets/hmh_custom_app/js/custom_js/material_request.js"
 app_include_js = "/assets/hmh_custom_app/js/custom_js/patient_encounter.js"
+app_include_js = "/assets/hmh_custom_app/js/custom_js/patient.js"
+
+
 
 # include js, css files in header of web template
 # web_include_css = "/assets/hmh_custom_app/css/hmh_custom_app.css"
@@ -123,13 +126,16 @@ app_include_js = "/assets/hmh_custom_app/js/custom_js/patient_encounter.js"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"Patient Encounter": {
-# 		"on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
-# 		# "on_cancel": "method",
-# 		# "on_trash": "method"
-# 	}
-# }
+doc_events = {
+	# "Patient Encounter": {
+	# 	"on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
+	# 	# "on_cancel": "method",
+	# 	# "on_trash": "method"
+	# },
+    "Patient": {
+        "after_save": "hmh_custom_app.custom_api.Patient.after_save"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
