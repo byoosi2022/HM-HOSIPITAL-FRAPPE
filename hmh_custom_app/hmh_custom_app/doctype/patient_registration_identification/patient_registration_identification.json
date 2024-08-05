@@ -198,11 +198,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2024-08-05 22:23:36.684545",
-=======
  "modified": "2024-08-05 22:34:15.350397",
->>>>>>> 450e857975da6eb571bb96a803a00a9033e7fd77
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
@@ -223,10 +219,7 @@
   }
  ],
  "search_fields": "patient_name, patient_phone",
-<<<<<<< HEAD
-=======
  "show_title_field_in_link": 1,
->>>>>>> 450e857975da6eb571bb96a803a00a9033e7fd77
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
