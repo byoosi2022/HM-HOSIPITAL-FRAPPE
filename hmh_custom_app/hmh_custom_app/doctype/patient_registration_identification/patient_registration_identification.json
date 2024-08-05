@@ -9,6 +9,8 @@
   "naming_series",
   "patient_name",
   "full_age",
+  "month",
+  "day",
   "gender",
   "patient_phone",
   "nin_no",
@@ -202,11 +204,21 @@
    "label": "Visit",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "day",
+   "fieldtype": "Int",
+   "label": "Day"
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Int",
+   "label": "Month"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-05 16:40:00.966398",
+ "modified": "2024-08-05 18:32:14.578196",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",

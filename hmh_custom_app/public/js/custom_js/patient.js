@@ -48,148 +48,141 @@ frappe.ui.form.on('Patient', {
             });
         });
        
-        
-        // Add event listener for custom_patient_mrno selection
-        frm.fields_dict['custom_patient_mrno'].df.onchange = function() {
-            if (frm.doc.custom_patient_mrno) {
-                frappe.db.get_value('Patient Registration Identification', frm.doc.custom_patient_mrno, 'full_age')
-                    .then(r => {
-                        if (r.message && r.message.full_age) {
-                            let full_age = r.message.full_age;
-                            document.querySelector('#dob-age').value = full_age;
-                            setAgeValues(full_age);
-                        }
-                    });
-                
-                frappe.db.get_value('Patient Registration Identification', frm.doc.custom_patient_mrno, 'patient_name')
-                    .then(r => {
-                        if (r.message && r.message.patient_name) {
-                            let patient_name = r.message.patient_name;
-                            let name_parts = patient_name.split(' ');
+   // Add event listener for custom_patient_mrno selection
+frm.fields_dict['custom_patient_mrno'].df.onchange = function() {
+    if (frm.doc.custom_patient_mrno) {
+        frappe.db.get_value('Patient Registration Identification', frm.doc.custom_patient_mrno, ['full_age', 'day', 'month', 'patient_name'])
+            .then(r => {
+                if (r.message) {
+                    if (r.message.full_age || r.message.month || r.message.day) {
+                        setAgeValues(r.message.full_age, r.message.month, r.message.day);
+                    }
+                }
+            });
 
-                            if (name_parts.length === 2) {
-                                frm.set_value('first_name', name_parts[0]);
-                                frm.set_value('last_name', name_parts[1]);
-                                frm.set_value('middle_name', '');
-                            } else if (name_parts.length === 3) {
-                                frm.set_value('first_name', name_parts[0]);
-                                frm.set_value('middle_name', name_parts[1]);
-                                frm.set_value('last_name', name_parts[2]);
-                            } else if (name_parts.length > 3) {
-                                frm.set_value('first_name', name_parts[0]);
-                                frm.set_value('last_name', name_parts[name_parts.length - 1]);
-                                frm.set_value('middle_name', name_parts.slice(1, -1).join(' '));
-                            } else {
-                                frm.set_value('first_name', patient_name);
-                                frm.set_value('middle_name', '');
-                                frm.set_value('last_name', '');
-                            }
-                        }
-                    });
-            }
-        };
+        frappe.db.get_value('Patient Registration Identification', frm.doc.custom_patient_mrno, 'patient_name')
+            .then(r => {
+                if (r.message && r.message.patient_name) {
+                    let patient_name = r.message.patient_name;
+                    let name_parts = patient_name.split(' ');
 
-        const dob = document.querySelector("input[data-fieldname='dob']");
-        const referenceNode = dob;
-        if (!document.querySelector('#ageInputControl')) {
-            const newNode = document.createElement('div');
-            newNode.setAttribute('id', 'ageInputControl');
-            newNode.style = 'display:flex;flex-flow:row wrap;justify-content: space-around';
-            newNode.innerHTML = `
-                <label style='width:25%;' class='control-label' style='padding-right: 0px;'>Day</label>
-                <label style='width:25%;' class='control-label' style='padding-right: 0px;'>Month</label>
-                <label style='width:25%;' class='control-label' style='padding-right: 0px;'>Age</label>
-                <label style='width:25%;' class='control-label' style='padding-right: 0px;'>Year</label>
-                <br>
-                <input style='width:25%;' id='dob-day' type='number' placeholder='1' min='1' max='31' class='input-with-feedback form-control bold'></input>
-                <input style='width:25%;' id='dob-mon' type='number' placeholder='1' min='1' max='12' class='input-with-feedback form-control bold'></input>
-                <input style='width:25%;' id='dob-age' type='number' placeholder='0' class='input-with-feedback form-control bold'></input>
-                <input style='width:25%;' id='dob-year' type='number' placeholder='0' class='input-with-feedback form-control bold'></input>
-                <br><br>`;
-            referenceNode.parentNode.insertBefore(newNode, referenceNode);
+                    if (name_parts.length === 2) {
+                        frm.set_value('first_name', name_parts[0]);
+                        frm.set_value('last_name', name_parts[1]);
+                        frm.set_value('middle_name', '');
+                    } else if (name_parts.length === 3) {
+                        frm.set_value('first_name', name_parts[0]);
+                        frm.set_value('middle_name', name_parts[1]);
+                        frm.set_value('last_name', name_parts[2]);
+                    } else if (name_parts.length > 3) {
+                        frm.set_value('first_name', name_parts[0]);
+                        frm.set_value('last_name', name_parts[name_parts.length - 1]);
+                        frm.set_value('middle_name', name_parts.slice(1, -1).join(' '));
+                    } else {
+                        frm.set_value('first_name', patient_name);
+                        frm.set_value('middle_name', '');
+                        frm.set_value('last_name', '');
+                    }
+                }
+            });
+    }
+};
 
-            let dv = 1, mv = 1, av = 0, yv = 1000;
+const dob = document.querySelector("input[data-fieldname='dob']");
+const referenceNode = dob;
+if (!document.querySelector('#ageInputControl')) {
+    const newNode = document.createElement('div');
+    newNode.setAttribute('id', 'ageInputControl');
+    newNode.style = 'display:flex;flex-flow:row wrap;justify-content: space-around';
+    newNode.innerHTML = `
+        <label style='width:25%;' class='control-label'>Day</label>
+        <label style='width:25%;' class='control-label'>Month</label>
+        <label style='width:25%;' class='control-label'>Age</label>
+        <label style='width:25%;' class='control-label'>Year</label>
+        <br>
+        <input style='width:25%;' id='dob-day' type='number' placeholder='1' min='1' max='31' class='input-with-feedback form-control bold'></input>
+        <input style='width:25%;' id='dob-mon' type='number' placeholder='1' min='1' max='12' class='input-with-feedback form-control bold'></input>
+        <input style='width:25%;' id='dob-age' type='number' placeholder='0' class='input-with-feedback form-control bold'></input>
+        <input style='width:25%;' id='dob-year' type='number' placeholder='0' class='input-with-feedback form-control bold'></input>
+        <br><br>`;
+    referenceNode.parentNode.insertBefore(newNode, referenceNode);
 
-            let setdob = (useY) => {
-                dv.toString().length == 1 && (dv = '0' + dv);
-                mv.toString().length == 1 && (mv = '0' + mv);
-                let dobv = `${useY ? yv : new Date().getFullYear() - av}-${mv}-${dv}`;
-                frm.set_value('dob', dobv);
-                tooltip();
-            };
+    let dv = 1, mv = 1, av = 0, yv = new Date().getFullYear();
 
-            function tooltip() {}
+    let setdob = (useY) => {
+        dv = dv.toString().length == 1 ? '0' + dv : dv;
+        mv = mv.toString().length == 1 ? '0' + mv : mv;
+        let dobv = `${useY ? yv : new Date().getFullYear() - av}-${mv}-${dv}`;
+        frm.set_value('dob', dobv);
+        tooltip();
+    };
 
-            let iday = document.querySelector('#dob-day');
-            iday.onchange = dayChange;
-            iday.onfocuschange = dayChange;
+    function tooltip() {}
 
-            function dayChange() {
-                dv = Math.abs((this.value || 1));
-                dv > 31 && (dv = 31);
-                dv < 1 && (dv = 1);
-                dv = parseInt(dv);
-                this.value = dv;
-                setdob();
-            }
+    let iday = document.querySelector('#dob-day');
+    iday.onchange = dayChange;
+    iday.onfocuschange = dayChange;
 
-            let imonth = document.querySelector('#dob-mon');
-            imonth.onchange = monthChange;
-            imonth.onfocuschange = monthChange;
+    function dayChange() {
+        dv = Math.abs(this.value || 1);
+        dv = dv > 31 ? 31 : dv < 1 ? 1 : parseInt(dv);
+        this.value = dv;
+        setdob();
+    }
 
-            function monthChange() {
-                mv = Math.abs((this.value || 1));
-                mv > 12 && (mv = 12);
-                mv < 1 && (mv = 1);
-                mv = parseInt(mv);
-                this.value = mv;
-                setdob();
-            }
+    let imonth = document.querySelector('#dob-mon');
+    imonth.onchange = monthChange;
+    imonth.onfocuschange = monthChange;
 
-            let iyear;
-            let iage = document.querySelector('#dob-age');
-            iage.onchange = ageChange;
-            iage.onfocuschange = ageChange;
+    function monthChange() {
+        mv = Math.abs(this.value || 1);
+        mv = mv > 12 ? 12 : mv < 1 ? 1 : parseInt(mv);
+        this.value = mv;
+        setdob();
+    }
 
-            function ageChange() {
-                av = Math.abs(parseInt((this.value || 0)));
-                av < 0 && (av = 0);
-                av > 200 && (av = 200);
-                this.value = av;
-                iyear.value = new Date().getFullYear() - av;
-                setdob();
-            }
+    let iyear = document.querySelector('#dob-year');
+    let iage = document.querySelector('#dob-age');
+    iage.onchange = ageChange;
+    iage.onfocuschange = ageChange;
 
-            iyear = document.querySelector('#dob-year');
-            iyear.onchange = yChange;
-            iyear.onfocuschange = yChange;
+    function ageChange() {
+        av = Math.abs(parseInt(this.value || 0));
+        av = av < 0 ? 0 : av > 200 ? 200 : av;
+        this.value = av;
+        iyear.value = new Date().getFullYear() - av;
+        setdob();
+    }
 
-            function yChange() {
-                yv = Math.abs((this.value || 1900));
-                yv > new Date().getFullYear() && (yv = new Date().getFullYear());
-                yv < 1900 && (yv = 1900);
-                yv = parseInt(yv);
-                this.value = yv;
-                iage.value = new Date().getFullYear() - yv;
-                setdob(true);
-            }
+    iyear.onchange = yChange;
+    iyear.onfocuschange = yChange;
 
-            function setAgeValues(full_age) {
-                av = full_age;
-                dv = 1;
-                mv = 1;
-                yv = new Date().getFullYear() - av;
-                iyear.value = yv;
-                iage.value = av;
-                setdob(true);
-            }
+    function yChange() {
+        yv = Math.abs(this.value || 1900);
+        yv = yv > new Date().getFullYear() ? new Date().getFullYear() : yv < 1900 ? 1900 : parseInt(yv);
+        this.value = yv;
+        iage.value = new Date().getFullYear() - yv;
+        setdob(true);
+    }
 
-            function age_html() {
-                let cal = document.querySelector(`[data-fieldname='age_html']`);
-                let diff = frappe.datetime.get_diff(frappe.datetime.get_today(), `${new Date().getFullYear() - (iage.value || 0)}\\${mv}\\${dv}`);
-                let yrs = 0;
-            }
-        }
+    function setAgeValues(full_age, month, day) {
+        av = full_age || 0;
+        mv = month || 1;
+        dv = day || 1;
+        yv = new Date().getFullYear() - av;
+        document.querySelector('#dob-year').value = yv;
+        document.querySelector('#dob-age').value = av;
+        document.querySelector('#dob-mon').value = mv;
+        document.querySelector('#dob-day').value = dv;
+        setdob(true);
+    }
+
+    function age_html() {
+        let cal = document.querySelector(`[data-fieldname='age_html']`);
+        let diff = frappe.datetime.get_diff(frappe.datetime.get_today(), `${new Date().getFullYear() - (iage.value || 0)}-${mv}-${dv}`);
+        let yrs = 0;
+    }
+}
 
         var consultation_item = "Consultation";
 
