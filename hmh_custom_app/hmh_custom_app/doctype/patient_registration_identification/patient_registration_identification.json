@@ -37,11 +37,17 @@
   {
    "fieldname": "patient_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Patient Name"
   },
   {
    "fieldname": "patient_phone",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Patient Phone"
   },
   {
@@ -62,6 +68,9 @@
   {
    "fieldname": "nok_phone",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "NOK Phone"
   },
   {
@@ -94,6 +103,9 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Patient MRNO",
    "options": "HMHCA-PID-.YYYY.-"
   },
@@ -173,7 +185,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-05 13:40:27.975806",
+ "modified": "2024-08-05 15:32:57.266112",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
@@ -193,7 +205,10 @@
    "write": 1
   }
  ],
+ "search_fields": "patient_name, patient_phone, patient_phone",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "naming_series"
 }
