@@ -259,9 +259,8 @@ frappe.ui.form.on('Patient', {
     }
 });
 
-
 frappe.ui.form.on('Vital Signs', {
-    before_save: function(frm) {
+    after_save: function(frm) {
         // Check if the document is in 'Draft' state
         if (frm.doc.docstatus === 0) {
             frappe.call({
@@ -272,13 +271,19 @@ frappe.ui.form.on('Vital Signs', {
                         patient: frm.doc.patient,
                         encounter_date: frm.doc.signs_date,
                         vital_signs: frm.doc.name,
-                        status: 'Draft'
+                        status: 'Draft',
+                        practitioner: frm.doc.practitioner // Make sure the practitioner is set
                     }
                 },
                 callback: function(response) {
                     if (!response.exc) {
                         frappe.msgprint(__('Draft Patient Encounter created successfully.'));
+                    } else {
+                        frappe.msgprint(__('Error creating Patient Encounter: ' + response.exc));
                     }
+                },
+                error: function(error) {
+                    frappe.msgprint(__('An error occurred: ' + error.message));
                 }
             });
         }
