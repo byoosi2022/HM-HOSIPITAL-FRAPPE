@@ -19,14 +19,21 @@ frappe.ui.form.on('Patient', {
                     patient_form: frm.doc.name
                 },
                 callback: function(response) {
-                    console.log(response)
                     if (response.message) {
                         frappe.msgprint(response.message);
                         frm.set_value('custom_bill_status', "Bill Sent");
+                        frm.save_or_update();
+                    } else {
+                        frappe.msgprint(__('Failed to send bill.'));
                     }
+                },
+                error: function(error) {
+                    console.error(error);
+                    frappe.msgprint(__('An error occurred while sending the bill. Please try again.'));
                 }
             });
         });
+        
         // Add event listener for custom_patient_mrno selection
         frm.fields_dict['custom_patient_mrno'].df.onchange = function() {
             if (frm.doc.custom_patient_mrno) {
