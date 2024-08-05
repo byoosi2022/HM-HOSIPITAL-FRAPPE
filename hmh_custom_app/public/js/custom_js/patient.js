@@ -20,9 +20,23 @@ frappe.ui.form.on('Patient', {
                 },
                 callback: function(response) {
                     if (response.message) {
+                        // Display the message from the server ggfff
                         frappe.msgprint(response.message);
-                        frm.set_value('custom_bill_status', "Bill Sent");
-                        frm.save_or_update();
+        
+                        // Check if the status was set correctly
+                        if (!frm.doc.custom_bill_status) {
+                            frm.set_value('custom_bill_status', "Bill Sent");
+                            
+                            // Save the form to ensure the change is recorded
+                            frm.save_or_update().then(() => {
+                                frappe.msgprint(__('Bill status updated and form saved.'));
+                            }).catch((error) => {
+                                console.error(error);
+                                frappe.msgprint(__('Failed to save the form. Please try again.'));
+                            });
+                        } else {
+                            frappe.msgprint(__('Bill status is already set to "Bill Sent".'));
+                        }
                     } else {
                         frappe.msgprint(__('Failed to send bill.'));
                     }
@@ -33,6 +47,7 @@ frappe.ui.form.on('Patient', {
                 }
             });
         });
+       
         
         // Add event listener for custom_patient_mrno selection
         frm.fields_dict['custom_patient_mrno'].df.onchange = function() {
