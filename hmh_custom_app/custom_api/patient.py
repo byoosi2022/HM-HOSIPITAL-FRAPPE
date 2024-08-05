@@ -122,6 +122,7 @@ def validate_patient(doc, method):
                 patient_reg_doc.save()
                 
             if patient_reg_doc.customer and patient_reg_doc.visit:
-                # Set the custom patient field in the Patient doctype
+                # Set the custom patient field in the Patient doctype 
                 doc.re_attendance = "Existing Customer"
+                doc.custom_re_attendence = "Re-Attendance"
                 doc.customer = patient_reg_doc.customer
