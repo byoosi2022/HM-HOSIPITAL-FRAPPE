@@ -137,7 +137,7 @@ doc_events = {
             "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient",
             # "hmh_custom_app.custom_api.patient.validate_patient"
         ],
-        "validate": "hmh_custom_app.custom_api.patient.validate_patient"
+        # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     }
 }
 

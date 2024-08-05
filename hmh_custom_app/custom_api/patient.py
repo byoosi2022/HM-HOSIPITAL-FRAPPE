@@ -102,27 +102,3 @@ def create_vital_signs_for_patient(doc, method=None):
             frappe.log_error(f"Failed to create Vital Signs for patient {doc.name}: {str(e)}", "Vital Signs Creation Error")
 
 
-import frappe
-
-def validate_patient(doc, method):
-    if doc.custom_patient_mrno:
-        # Fetch the Patient Registration Identification linked by custom_patient_mrno
-        patient_reg_id = frappe.get_all(
-            'Patient Registration Identification',
-            filters={'name': doc.custom_patient_mrno},
-            fields=['name', 'customer', 'visit']
-        )
-        
-        if patient_reg_id:
-            patient_reg_doc = frappe.get_doc('Patient Registration Identification', patient_reg_id[0]['name'])
-            if not patient_reg_doc.customer:
-                # Update the customer field in Patient Registration Identification visit
-                patient_reg_doc.customer = doc.customer
-                patient_reg_doc.visit = "First Time Visit"
-                patient_reg_doc.save()
-                
-            if patient_reg_doc.customer and patient_reg_doc.visit:
-                # Set the custom patient field in the Patient doctype 
-                doc.re_attendance = "Existing Customer"
-                doc.custom_re_attendence = "Re-Attendance"
-                doc.customer = patient_reg_doc.customer

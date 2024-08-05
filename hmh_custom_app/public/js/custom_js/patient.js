@@ -203,5 +203,84 @@ frappe.ui.form.on('Patient', {
                 }
             });
         }
+    },
+    custom_patient_mrno: function(frm) {
+        if (frm.doc.custom_patient_mrno) {
+            // Fetch the Patient Registration Identification linked by custom_patient_mrno
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Patient Registration Identification',
+                    filters: {'name': frm.doc.custom_patient_mrno},
+                    fields: ['name', 'customer', 'visit']
+                },
+                callback: function(response) {
+                    let patient_reg_id = response.message;
+                    if (patient_reg_id && patient_reg_id.length > 0) {
+                        let patient_reg_doc_name = patient_reg_id[0].name;
+                        // Fetch the Patient Registration Identification document
+                        frappe.call({
+                            method: 'frappe.client.get',
+                            args: {
+                                doctype: 'Patient Registration Identification',
+                                name: patient_reg_doc_name
+                            },
+                            callback: function(response) {
+                                let patient_reg_doc = response.message;
+                                if (patient_reg_doc) {
+                                    if (!patient_reg_doc.customer) {
+                                        // Update the customer field in Patient Registration Identification visit
+                                        patient_reg_doc.customer = frm.doc.customer;
+                                        patient_reg_doc.visit = "First Time Visit";
+                                        frappe.call({
+                                            method: 'frappe.client.save',
+                                            args: {
+                                                doc: patient_reg_doc
+                                            },
+                                            callback: function(response) {
+                                                console.log('Patient Registration Identification updated successfully');
+                                            }
+                                        });
+                                    }
+                                    
+                                    if (patient_reg_doc.customer && patient_reg_doc.visit) {
+                                        // Set the custom patient field in the Patient doctype
+                                        frm.set_value('re_attendance', 'Existing Customer');
+                                        frm.set_value('custom_attendance', 'Re-Attendance');
+                                        frm.set_value('customer', patient_reg_doc.customer);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+});
+
+
+frappe.ui.form.on('Vital Signs', {
+    before_save: function(frm) {
+        // Check if the document is in 'Draft' state
+        if (frm.doc.docstatus === 0) {
+            frappe.call({
+                method: 'frappe.client.insert',
+                args: {
+                    doc: {
+                        doctype: 'Patient Encounter',
+                        patient: frm.doc.patient,
+                        encounter_date: frm.doc.signs_date,
+                        vital_signs: frm.doc.name,
+                        status: 'Draft'
+                    }
+                },
+                callback: function(response) {
+                    if (!response.exc) {
+                        frappe.msgprint(__('Draft Patient Encounter created successfully.'));
+                    }
+                }
+            });
+        }
     }
 });
