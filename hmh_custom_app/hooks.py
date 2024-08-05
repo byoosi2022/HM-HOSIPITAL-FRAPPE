@@ -127,15 +127,20 @@ app_include_js = "/assets/hmh_custom_app/js/custom_js/patient.js"
 # Hook on document methods and events
 
 doc_events = {
-	# "Patient Encounter": {
-	# 	"on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
-	# 	# "on_cancel": "method",
-	# 	# "on_trash": "method"
-	# },
+    # "Patient Encounter": {
+    #     "on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
+    #     # "on_cancel": "method",
+    #     # "on_trash": "method"
+    # },
     "Patient": {
-        "after_save": "hmh_custom_app.custom_api.Patient.after_save"
+        "on_update": [
+            "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient",
+            # "hmh_custom_app.custom_api.patient.validate_patient"
+        ],
+        "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     }
 }
+
 
 # Scheduled Tasks
 # ---------------

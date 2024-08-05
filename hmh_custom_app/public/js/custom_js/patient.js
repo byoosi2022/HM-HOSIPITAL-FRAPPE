@@ -4,6 +4,7 @@ frappe.ui.form.on('Patient', {
             frm.doc.phone = frm.doc.contact;
         }
     },
+    
     refresh: function(frm) {
         
         frm.add_custom_button(__('Get Consulation Fees'), function() {

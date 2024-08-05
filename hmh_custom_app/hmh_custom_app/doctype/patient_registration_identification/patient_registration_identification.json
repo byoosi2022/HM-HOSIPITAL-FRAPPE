@@ -30,7 +30,8 @@
   "customer_group",
   "customer",
   "column_break_lxif",
-  "default_price_list"
+  "default_price_list",
+  "visit"
  ],
  "fields": [
   {
@@ -161,13 +162,18 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "visit",
+   "fieldtype": "Data",
+   "label": "Visit",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-25 18:15:16.474646",
+ "modified": "2024-08-05 13:40:27.975806",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",

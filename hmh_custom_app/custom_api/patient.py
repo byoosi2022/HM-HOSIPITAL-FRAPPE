@@ -78,26 +78,50 @@ def create_sales_invoice(patient_form):
 
 
 
+# In your custom Python module (e.g., hmh_custom_app/custom_api/Patient.py)
 
-class Patient(Document):
-    def after_save(self):
-        try:
-            create_vital_signs_for_patient(self)
-        except Exception as e:
-            frappe.log_error(message=f"Error creating Vital Signs for patient {self.name}: {str(e)}", title="Vital Signs Creation Error")
 
-def create_vital_signs_for_patient(patient):
+def create_vital_signs_for_patient(doc, method=None):
     # Check if a draft Vital Signs document already exists for this patient
     existing_vital_signs = frappe.get_all("Vital Signs", filters={
-        "patient": patient.name,
-        "docstatus": 0  # 0 means draft
+        "patient": doc.name,
+        "custom_patient_status": "Seen The Receptionist",
+        # "docstatus": 0  # Ensure it's in draft state
     })
 
     if not existing_vital_signs:
         # Create a new Vital Signs document in draft state
-        vital_signs = frappe.get_doc({
-            "doctype": "Vital Signs",
-            "patient": patient.name,
-            "status": "Draft"
-        })
-        vital_signs.insert(ignore_permissions=True)
+        try:
+            vital_signs = frappe.get_doc({
+                "doctype": "Vital Signs",
+                "patient": doc.name,
+                "custom_patient_status": "Seen The Receptionist"
+            })
+            vital_signs.insert(ignore_permissions=True)
+        except Exception as e:
+            frappe.log_error(f"Failed to create Vital Signs for patient {doc.name}: {str(e)}", "Vital Signs Creation Error")
+
+
+import frappe
+
+def validate_patient(doc, method):
+    if doc.custom_patient_mrno:
+        # Fetch the Patient Registration Identification linked by custom_patient_mrno
+        patient_reg_id = frappe.get_all(
+            'Patient Registration Identification',
+            filters={'name': doc.custom_patient_mrno},
+            fields=['name', 'customer', 'visit']
+        )
+        
+        if patient_reg_id:
+            patient_reg_doc = frappe.get_doc('Patient Registration Identification', patient_reg_id[0]['name'])
+            if not patient_reg_doc.customer:
+                # Update the customer field in Patient Registration Identification visit
+                patient_reg_doc.customer = doc.customer
+                patient_reg_doc.visit = "First Time Visit"
+                patient_reg_doc.save()
+                
+            if patient_reg_doc.customer and patient_reg_doc.visit:
+                # Set the custom patient field in the Patient doctype
+                doc.re_attendance = "Existing Customer"
+                doc.customer = patient_reg_doc.customer
