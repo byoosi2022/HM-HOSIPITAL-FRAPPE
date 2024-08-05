@@ -7,7 +7,7 @@ frappe.ui.form.on('Patient', {
     
     refresh: function(frm) {
         
-        frm.add_custom_button(__('Get Consulation Fees'), function() {
+        frm.add_custom_button(__('Send Bill to Cash Drawer'), function() {
             frappe.call({
                 method: "hmh_custom_app.custom_api.patient.create_sales_invoice",
                 args: {
