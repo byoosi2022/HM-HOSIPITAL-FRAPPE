@@ -122,18 +122,22 @@
   {
    "fieldname": "village",
    "fieldtype": "Data",
-   "label": "Village"
+   "label": "Village",
+   "reqd": 1
   },
   {
    "fieldname": "district",
-   "fieldtype": "Data",
-   "label": "District"
+   "fieldtype": "Link",
+   "label": "District",
+   "options": "Territory",
+   "reqd": 1
   },
   {
    "fieldname": "country",
    "fieldtype": "Link",
    "label": "Country",
-   "options": "Country"
+   "options": "Country",
+   "reqd": 1
   },
   {
    "fieldname": "residence_tab",
@@ -154,13 +158,16 @@
    "fieldname": "customer_group",
    "fieldtype": "Link",
    "label": "Customer Group",
-   "options": "Customer Group"
+   "options": "Customer Group",
+   "reqd": 1
   },
   {
+   "fetch_from": "customer_group.default_price_list",
    "fieldname": "default_price_list",
    "fieldtype": "Link",
    "label": "Default Price List",
-   "options": "Price List"
+   "options": "Price List",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_lxif",
@@ -173,29 +180,33 @@
   {
    "fieldname": "subcounty",
    "fieldtype": "Data",
-   "label": "Subcounty"
+   "label": "Subcounty",
+   "reqd": 1
   },
   {
    "fieldname": "parish",
    "fieldtype": "Data",
-   "label": "Parish"
+   "label": "Parish",
+   "reqd": 1
   },
   {
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer"
+   "options": "Customer",
+   "read_only": 1
   },
   {
    "fieldname": "visit",
    "fieldtype": "Data",
    "label": "Visit",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-05 15:55:18.945196",
+ "modified": "2024-08-05 16:40:00.966398",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
@@ -220,5 +231,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "naming_series"
+ "title_field": "patient_name"
 }
