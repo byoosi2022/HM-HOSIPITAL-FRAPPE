@@ -173,8 +173,7 @@
    "fieldname": "visit",
    "fieldtype": "Data",
    "label": "Visit",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "day",
@@ -199,7 +198,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-05 20:02:10.716400",
+ "modified": "2024-08-05 22:34:15.350397",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
@@ -219,7 +218,7 @@
    "write": 1
   }
  ],
- "search_fields": "patient_name, patient_phone, patient_phone",
+ "search_fields": "patient_name, patient_phone",
  "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
