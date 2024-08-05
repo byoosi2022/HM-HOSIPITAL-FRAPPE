@@ -3,6 +3,11 @@ frappe.ui.form.on('Patient', {
         if (!frm.doc.phone && frm.doc.contact && frm.doc.contact.match && frm.doc.contact.match(/^\d{9,12}$/)) {
             frm.doc.phone = frm.doc.contact;
         }
+
+        // if (frm.doc.custom_bill_status != "Bill Sent") {
+        //     frappe.msgprint(__('You have.'));
+
+        // }
     },
     
     refresh: function(frm) {
@@ -17,6 +22,7 @@ frappe.ui.form.on('Patient', {
                     console.log(response)
                     if (response.message) {
                         frappe.msgprint(response.message);
+                        frm.set_value('custom_bill_status', "Bill Sent");
                     }
                 }
             });
