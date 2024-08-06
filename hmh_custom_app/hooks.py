@@ -14,6 +14,7 @@ app_license = "mit"
 app_include_js = "/assets/hmh_custom_app/js/custom_js/material_request.js"
 app_include_js = "/assets/hmh_custom_app/js/custom_js/patient_encounter.js"
 app_include_js = "/assets/hmh_custom_app/js/custom_js/patient.js"
+app_include_js = "/assets/hmh_custom_app/js/custom_js/vitals.js"
 
 
 
@@ -140,13 +141,17 @@ doc_events = {
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
 
-    "Patient Payment Management": {
-        "on_subbmit": [
-            "hmh_custom_app.custom_api.patient.update_patient_bill_status",
-            "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments"
-        ],
-        # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
-    }
+    # "Patient Payment Management": {
+    #     # "on_subbmit": [
+    #     #     "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+            
+    #     # ],
+    #     "on_update": [
+    #         "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments",
+    #         "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+            
+    #         ]
+    # }
 }
 
 

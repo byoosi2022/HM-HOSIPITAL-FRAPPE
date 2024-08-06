@@ -123,7 +123,9 @@ def create_vital_signs_for_patient_frompayments(doc, method=None):
                 vital_signs = frappe.get_doc({
                     "doctype": "Vital Signs",
                     "patient": doc.patient,
-                    "custom_patient_status": "Seen The Receptionist"
+                    "custom_patient_status": "Seen The Receptionist",
+                    "custom_customer_type": doc.customer_group,
+                    "custom_invoice_no": doc.customer_group 
                 })
                 vital_signs.insert(ignore_permissions=True)
             except Exception as e:

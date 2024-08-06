@@ -282,8 +282,9 @@ def collect_invoices(patient):
         # Save the Sales Invoice
         sales_invoice.insert()
 
-        # Optionally, submit the Sales Invoice
+        # Optionally, submit the Sales Invoice 
         sales_invoice.submit()
+        
         
         # Check Sales Invoice status and outstanding amount
         sales_invoice.reload()
@@ -291,7 +292,8 @@ def collect_invoices(patient):
             patient_doc.custom_bill_status = "Payments Pending"
         else:
             patient_doc.custom_bill_status = "Approved"
-        
+            
+        patient_doc.custom_invoice_no = sales_invoice.name
         patient_doc.save()
         frappe.db.commit()
 
@@ -429,6 +431,7 @@ def pay_now(patient):
             patient_doc.custom_bill_status = "Payments Pending"
 
         # Save the patient payment document with updated bill_status
+        patient_doc.custom_invoice_no = sales_invoice.name
         patient_doc.save()
         frappe.db.commit()
         return {

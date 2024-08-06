@@ -1,5 +1,6 @@
 // Copyright (c) 2024, Paul Mututa and contributors
 // For license information, please see license.txt
+
 frappe.ui.form.on('Patient Payment Management', {
     patient: function(frm) {
         populateInvoiceTable(frm);
@@ -8,8 +9,18 @@ frappe.ui.form.on('Patient Payment Management', {
         const success = await submitPayments(frm);
         if (!success) {
             frappe.validated = false; // Prevent the form from saving
+        } else {
+            try {
+                update_patient_bill_status(frm); // Call the function only if submitPayments is successful
+            } catch (error) {
+                frappe.msgprint({
+                    title: __('Error'),
+                    indicator: 'red',
+                    message: __('An error occurred while updating patient bill status.')
+                });
+            }
         }
-    }
+    },
 });
 
 function populateInvoiceTable(frm) {
@@ -56,6 +67,7 @@ function populateInvoiceTable(frm) {
     }
 }
 
+
 async function submitPayments(frm) {
     try {
         const response = await frappe.call({
@@ -93,7 +105,18 @@ async function submitPayments(frm) {
     }
 }
 
-
-
-
+function update_patient_bill_status(frm) {
+    // Call the server-side method to update patient bill status
+    frappe.call({
+        method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
+        args: {
+            'custom_payment_id': frm.doc.patient
+        },
+        callback: function(response) {
+            if (response.message) {
+                frappe.msgprint(response.message);
+            }
+        }
+    });
+}
 

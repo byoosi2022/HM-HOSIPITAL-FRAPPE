@@ -285,6 +285,7 @@ frappe.ui.form.on('Vital Signs', {
                         encounter_date: frm.doc.signs_date,
                         vital_signs: frm.doc.name,
                         status: 'Draft',
+                        consultation_charge:frm.doc.custom_practionaer,
                         practitioner: frm.doc.custom_practionaer // Make sure the practitioner is set
                     }
                 },

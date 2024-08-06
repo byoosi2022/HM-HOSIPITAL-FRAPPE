@@ -48,14 +48,16 @@
    "label": "Posting Date"
   },
   {
+   "allow_on_submit": 1,
    "default": "now",
    "fieldname": "posting_time",
    "fieldtype": "Time",
    "label": "Posting Time"
   },
   {
+   "fetch_from": "patient.custom_consulting_department",
    "fieldname": "cost_center",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Department",
    "options": "Cost Center"
   },
@@ -136,7 +138,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-06 02:07:21.745140",
+ "modified": "2024-08-06 19:18:21.195555",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Payment Management",
