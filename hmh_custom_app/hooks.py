@@ -127,7 +127,7 @@ app_include_js = "/assets/hmh_custom_app/js/custom_js/patient.js"
 # Hook on document methods and events
 
 doc_events = {
-    # "Patient Encounter": {
+    # "Patient Encounter": { hmh_custom_app.custom_api.patient.update_patient_bill_status
     #     "on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
     #     # "on_cancel": "method",
     #     # "on_trash": "method"
@@ -136,6 +136,14 @@ doc_events = {
         "on_update": [
             "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient",
             # "hmh_custom_app.custom_api.patient.validate_patient"
+        ],
+        # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
+    },
+
+    "Patient Payment Management": {
+        "on_subbmit": [
+            "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+            "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments"
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     }

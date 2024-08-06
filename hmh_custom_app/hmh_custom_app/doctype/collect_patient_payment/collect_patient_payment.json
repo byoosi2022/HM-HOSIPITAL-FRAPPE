@@ -213,7 +213,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-07-26 19:35:11.866756",
+ "modified": "2024-08-05 23:38:55.505727",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Collect Patient Payment",
@@ -221,6 +221,7 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -234,6 +235,7 @@
    "write": 1
   },
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,

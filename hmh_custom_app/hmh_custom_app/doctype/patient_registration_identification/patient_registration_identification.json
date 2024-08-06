@@ -11,12 +11,14 @@
   "full_age",
   "month",
   "day",
+  "date_of_birth",
   "column_break_ldgz",
   "date",
   "time",
   "patient_phone",
   "gender",
   "nin_no",
+  "email",
   "section_break_ajgc",
   "patient_identification",
   "residence_tab",
@@ -166,8 +168,7 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer",
-   "read_only": 1
+   "options": "Customer"
   },
   {
    "fieldname": "visit",
@@ -194,11 +195,22 @@
    "fieldtype": "Table",
    "label": "Next of KIN Details",
    "options": "Patient Identification"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "read_only": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-05 22:34:15.350397",
+ "modified": "2024-08-06 15:12:43.059812",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
@@ -219,7 +231,6 @@
   }
  ],
  "search_fields": "patient_name, patient_phone",
- "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
