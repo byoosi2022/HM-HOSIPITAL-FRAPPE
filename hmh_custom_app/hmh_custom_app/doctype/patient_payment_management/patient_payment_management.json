@@ -22,7 +22,8 @@
   "amended_from",
   "section_break_yfbf",
   "invoice_details",
-  "total_grand_totals"
+  "section_break_koyi",
+  "invoice_awaiting"
  ],
  "fields": [
   {
@@ -88,6 +89,7 @@
    "allow_on_submit": 1,
    "fieldname": "total_paid_amount",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Total Paid Amount"
   },
   {
@@ -111,8 +113,10 @@
    "search_index": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_yfbf",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Outstanding Invoices Awaiting Payments"
   },
   {
    "fieldname": "invoice_details",
@@ -121,24 +125,30 @@
    "options": "Invoice Items Details"
   },
   {
-   "allow_on_submit": 1,
-   "fieldname": "total_grand_totals",
-   "fieldtype": "Currency",
-   "label": "Total Grand Totals"
-  },
-  {
    "default": "UGX",
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency",
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_koyi",
+   "fieldtype": "Section Break",
+   "label": "Invoices Awaiting to be Submitted"
+  },
+  {
+   "fieldname": "invoice_awaiting",
+   "fieldtype": "Table",
+   "label": "Invoices Awaiting",
+   "options": "Drafted Invoices"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-06 19:18:21.195555",
+ "modified": "2024-08-07 03:47:21.782075",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Payment Management",

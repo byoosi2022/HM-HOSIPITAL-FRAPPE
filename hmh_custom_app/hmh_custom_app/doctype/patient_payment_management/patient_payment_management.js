@@ -4,6 +4,7 @@
 frappe.ui.form.on('Patient Payment Management', {
     patient: function(frm) {
         populateInvoiceTable(frm);
+        populateInvoiceTableDraftes(frm);
     },
     on_submit: async function(frm) {
         const success = await submitPayments(frm);
@@ -118,5 +119,50 @@ function update_patient_bill_status(frm) {
             }
         }
     });
+}
+
+
+function populateInvoiceTableDraftes(frm) {
+    // Clear the existing rows in the child table first
+    frm.clear_table('invoice_awaiting');
+    frm.refresh_field('invoice_awaiting');
+
+    // Get the filters
+    const cost_center = frm.doc.cost_center;
+    const posting_date = frm.doc.posting_date;
+    const patient = frm.doc.patient;
+
+    if (patient) {
+        // Call the server-side method
+        frappe.call({
+            method: 'hmh_custom_app.custom_api.sales_invoice.get_sales_invoices_with_drafts',
+            args: {
+                cost_center: cost_center,
+                posting_date: posting_date,
+                patient: patient
+            },
+            callback: function(response) {
+                const invoices = response.message.Invoices;
+                if (invoices && invoices.length > 0) {
+                    // Add rows to the child table
+                    invoices.forEach(invoice => {
+                        let child = frm.add_child('invoice_awaiting');
+                        frappe.model.set_value(child.doctype, child.name, 'invoice', invoice.name);
+                        frappe.model.set_value(child.doctype, child.name, 'outstanding_amount', invoice.outstanding_amount);
+                        frappe.model.set_value(child.doctype, child.name, 'posting_date', invoice.posting_date);
+                    });
+
+                    // Refresh the child table
+                    frm.refresh_field('invoice_awaiting');
+                } else {
+                    frappe.msgprint(__('No invoices found with the given filters.'));
+                }
+            },
+            error: function(error) {
+                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                console.error(error);
+            }
+        });
+    }
 }
 

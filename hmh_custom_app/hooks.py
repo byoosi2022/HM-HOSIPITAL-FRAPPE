@@ -140,18 +140,27 @@ doc_events = {
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
+    
+    "Patient Encounter": {
+        "on_update": [
+            "hmh_custom_app.custom_api.patient_bill.on_submit",
+            # "hmh_custom_app.custom_api.patient.validate_patient"
+        ],
+        # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
+    },
 
-    # "Patient Payment Management": {
-    #     # "on_subbmit": [
-    #     #     "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+
+    "Patient Payment Management": {
+        # "on_subbmit": [
+        #     "hmh_custom_app.custom_api.patient.update_patient_bill_status",
             
-    #     # ],
-    #     "on_update": [
-    #         "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments",
-    #         "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+        # ],
+        "on_subbmit": [
+            "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments",
+            # "hmh_custom_app.custom_api.patient.update_patient_bill_status",
             
-    #         ]
-    # }
+            ]
+    }
 }
 
 

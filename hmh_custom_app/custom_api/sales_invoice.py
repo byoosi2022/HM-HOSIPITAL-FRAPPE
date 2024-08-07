@@ -443,3 +443,48 @@ def pay_now(patient):
         return {
             "error": str(e)
         }
+
+
+@frappe.whitelist()
+def get_sales_invoices_with_drafts(cost_center=None, posting_date=None, patient=None):
+    try:
+        # Log filter criteria
+        frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
+
+        # Define filters
+        filters = {"docstatus": 0, "outstanding_amount": [">", 0]}
+        if cost_center:
+            filters["cost_center"] = cost_center
+        # if posting_date:
+        #     filters["posting_date"] = posting_date
+        if patient:
+            filters["patient"] = patient
+
+        # Fetch sales invoices with specified fields
+        sales_invoices = frappe.get_all(
+            "Sales Invoice",
+            filters=filters,
+            fields=["name", "posting_date", "outstanding_amount", "cost_center", "posting_date", "patient"]
+        )
+
+        # Log fetched sales invoices
+        frappe.logger().info(f"Fetched {len(sales_invoices)} sales invoices")
+
+        if not sales_invoices:
+            frappe.logger().info("No sales invoices found with the given filters")
+            return {
+                "Invoices": [],
+            }
+
+        # Prepare the response
+        result = {
+            "Invoices": sales_invoices
+        }
+
+        # Log final result
+        frappe.logger().info(f"Final result: {result}")
+        # Return the list of invoices with their outstanding amount and posting date
+        return result
+
+    except Exception as e:
+        frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))

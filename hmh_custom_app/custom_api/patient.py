@@ -97,7 +97,10 @@ def create_vital_signs_for_patient(doc, method=None):
                 vital_signs = frappe.get_doc({
                     "doctype": "Vital Signs",
                     "patient": doc.name,
-                    "custom_patient_status": "Seen The Receptionist"
+                    "custom_practionaer": doc.custom_consulting_doctor,
+                    "custom_patient_status": "Seen The Receptionist",
+                    "custom_customer_type": doc.customer_group,
+                    "custom_invoice_no": doc.custom_invoice_no 
                 })
                 vital_signs.insert(ignore_permissions=True)
             except Exception as e:
@@ -112,7 +115,7 @@ def create_vital_signs_for_patient_frompayments(doc, method=None):
     if doc.customer_group == "Insurance" or patient_doc.custom_bill_status == "Approved":
         # Check if a draft Vital Signs document already exists for this patient
         existing_vital_signs = frappe.get_all("Vital Signs", filters={
-            "patient": doc.name,
+            "patient": patient_doc.name,
             "custom_patient_status": "Seen The Receptionist",
             # "docstatus": 0  # Ensure it's in draft state
         })
@@ -122,10 +125,11 @@ def create_vital_signs_for_patient_frompayments(doc, method=None):
             try:
                 vital_signs = frappe.get_doc({
                     "doctype": "Vital Signs",
-                    "patient": doc.patient,
+                    "patient": patient_doc.patient,
+                    "custom_practionaer": patient_doc.custom_consulting_doctor,
                     "custom_patient_status": "Seen The Receptionist",
-                    "custom_customer_type": doc.customer_group,
-                    "custom_invoice_no": doc.customer_group 
+                    "custom_customer_type": patient_doc.customer_group,
+                    "custom_invoice_no": patient_doc.custom_invoice_no 
                 })
                 vital_signs.insert(ignore_permissions=True)
             except Exception as e:
