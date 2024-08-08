@@ -20,5 +20,16 @@
   "name": "Customer FIilters",
   "script": "frappe.ui.form.on('Patient Registration Identification', {\r\n    customer_group: function(frm) {\r\n        // Clear the customer field\r\n        frm.set_value('customer', '');\r\n        \r\n        // Set the filter for the customer field based on the selected customer group\r\n        if (frm.doc.customer_group) {\r\n            frm.set_query('customer', function() {\r\n                return {\r\n                    filters: {\r\n                        'customer_group': frm.doc.customer_group\r\n                    }\r\n                };\r\n            });\r\n        } else {\r\n            frm.set_query('customer', function() {\r\n                return {\r\n                    filters: {}\r\n                };\r\n            });\r\n        }\r\n    }\r\n});\r\n",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Encounter",
+  "enabled": 1,
+  "modified": "2024-08-08 14:34:06.406004",
+  "module": "HMH CUSTOM APP",
+  "name": "Request for vitals",
+  "script": "frappe.ui.form.on('Patient Encounter', {\r\n    custom_request_for_another_vitals: function(frm) {\r\n        requestTriage(frm);\r\n    },\r\n});\r\n\r\nfunction requestTriage(frm) {\r\n    // Check if the form object and doc are valid\r\n    if (frm && frm.doc) {\r\n        // Create a new Vital Signs document\r\n        frappe.model.with_doctype('Vital Signs', function() {\r\n            let vital_sign_doc = frappe.model.get_new_doc('Vital Signs');\r\n\r\n            // Set the fields from the Patient Encounter to the new Vital Signs document\r\n            vital_sign_doc.patient = frm.doc.patient;\r\n            vital_sign_doc.patient_name = frm.doc.patient_name;\r\n            vital_sign_doc.custom_practionaer = frm.doc.practitioner;\r\n            vital_sign_doc.custom_encounter_id = frm.doc.name;\r\n            vital_sign_doc.custom_patient_status = 'Doctor\\'s Request';\r\n\r\n            // Insert the new document into the database without routing\r\n            frappe.db.insert(vital_sign_doc).then(function(doc) {\r\n                frappe.msgprint(__('Your Vital Signs Request Sent successfully.'));\r\n            }).catch(function(error) {\r\n                frappe.msgprint(__('Failed to create Vital Signs document.'));\r\n                console.error(error);\r\n            });\r\n        });\r\n    } else {\r\n        // Display an error message if frm or frm.doc is not valid\r\n        frappe.msgprint(__('Form object or document is invalid.'));\r\n    }\r\n}\r\n",
+  "view": "Form"
  }
 ]
