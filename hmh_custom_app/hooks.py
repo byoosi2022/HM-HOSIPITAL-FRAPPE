@@ -253,7 +253,13 @@ fixtures = [
         "filters": [
             ["module", "=", "HMH CUSTOM APP"]
         ]
-    }
+    },
+    {
+        "doctype": "Client Script",
+        "filters": [
+            ["module", "=", "HMH CUSTOM APP"]
+        ]
+    },
 ]
 
 

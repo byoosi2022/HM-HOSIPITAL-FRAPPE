@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Encounter",
+  "enabled": 1,
+  "modified": "2024-08-07 11:31:43.391087",
+  "module": "HMH CUSTOM APP",
+  "name": "Patient Bills",
+  "script": "frappe.ui.form.on('Patient Encounter', {\r\n    custom_get_patients_bill: function(frm) {\r\n        update_custom_items_table(frm);\r\n    },\r\n    custom_get_bills: function(frm) {\r\n        update_items_table(frm);\r\n    },\r\n    custom_view_traige: function(frm) {\r\n        viewTriage(frm);\r\n    },\r\n\r\n});\r\n\r\n\r\nfrappe.ui.form.on('Expense Claim Items', {\r\n    amount: function (frm, cdt, cdn) {\r\n        calculateTotalsTransfers(frm);\r\n    }\r\n});\r\nfrappe.ui.form.on('drug_prescription', {\r\n    item_code: function(frm, cdt, cdn) {\r\n        var item = frappe.get_doc(cdt, cdn);\r\n        if (frm.doc.price_list) {\r\n            frappe.model.set_value(cdt, cdn, 'price_list', frm.doc.price_list);\r\n        }\r\n    }\r\n});\r\n\r\nfunction update_custom_items_table(frm) {\r\n    frappe.call({\r\n        method: 'hmh_custom_app.custom_api.patient_encounter.on_submit',\r\n        args: {\r\n            patient_encounter: frm.doc.name\r\n        },\r\n        callback: function(r) {\r\n            if (r.message.status === 'success') {\r\n                frappe.msgprint(r.message.message);\r\n                // Refresh the custom_items table to reflect the changes\r\n                frm.refresh_field('custom_items');\r\n                // Reload the page\r\n                 location.reload();\r\n            } else {\r\n                frappe.msgprint(__('Error: ') + r.message.message);\r\n            }\r\n        },\r\n        error: function(r) {\r\n            frappe.msgprint(__('Server call failed.'));\r\n        }\r\n    });\r\n}\r\n\r\nfunction update_items_table(frm) {\r\n    frappe.call({\r\n        method: 'hmh_custom_app.custom_api.encounter.on_submit',\r\n        args: {\r\n            patient_encounter: frm.doc.name\r\n        },\r\n        callback: function(r) {\r\n            if (r.message.status === 'success') {\r\n                frm.set_value('custom_total_amount', r.message.sums.drug_sum);\r\n                frm.set_value('custom_total_investigations', r.message.sums.lab_test_sum);\r\n                frm.set_value('custom_total_clinical_procedures', r.message.sums.procedure_sum);\r\n                frm.set_value('custom_total_therapies', r.message.sums.therapy_sum);\r\n                frm.set_value('custom_total_service_request', r.message.sums.service_sum);\r\n                 frm.save();\r\n                 \r\n            } else {\r\n                frappe.msgprint(__('Error: ') + r.message.message);\r\n            }\r\n        },\r\n        error: function(r) {\r\n            frappe.msgprint(__('Server call failed.'));\r\n        }\r\n    });\r\n}\r\n\r\n\r\n// Function to navigate to the Vital Signs form\r\nfunction viewTriage(frm) {\r\n    // Check if the form object and doc are valid\r\n    console.log(\"Iseee youiyh\")\r\n    if (frm && frm.doc) {\r\n        // Check if custom_vitals_id exists in the doc\r\n        if (frm.doc.custom_vitals_id) {\r\n            // Navigate to the Vital Signs form with the given custom_vitals_id\r\n            frappe.set_route('Form', 'Vital Signs', frm.doc.custom_vitals_id);\r\n        } else {\r\n            // Display a message if custom_vitals_id is not found\r\n            frappe.msgprint(__('No Vitals ID found.'));\r\n        }\r\n    } else {\r\n        // Display an error message if frm or frm.doc is not valid\r\n        frappe.msgprint(__('Form object or document is invalid.'));\r\n    }\r\n}\r\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Registration Identification",
+  "enabled": 1,
+  "modified": "2024-08-07 09:31:57.436721",
+  "module": "HMH CUSTOM APP",
+  "name": "Customer FIilters",
+  "script": "frappe.ui.form.on('Patient Registration Identification', {\r\n    customer_group: function(frm) {\r\n        // Clear the customer field\r\n        frm.set_value('customer', '');\r\n        \r\n        // Set the filter for the customer field based on the selected customer group\r\n        if (frm.doc.customer_group) {\r\n            frm.set_query('customer', function() {\r\n                return {\r\n                    filters: {\r\n                        'customer_group': frm.doc.customer_group\r\n                    }\r\n                };\r\n            });\r\n        } else {\r\n            frm.set_query('customer', function() {\r\n                return {\r\n                    filters: {}\r\n                };\r\n            });\r\n        }\r\n    }\r\n});\r\n",
+  "view": "Form"
+ }
+]
