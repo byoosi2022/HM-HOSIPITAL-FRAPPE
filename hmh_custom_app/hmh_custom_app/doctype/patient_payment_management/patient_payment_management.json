@@ -82,7 +82,7 @@
    "allow_on_submit": 1,
    "fieldname": "cash_items",
    "fieldtype": "Table",
-   "label": "Cash Items",
+   "label": "Payment Collection",
    "options": "Modes of Payment Items"
   },
   {
@@ -148,7 +148,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-07 03:47:21.782075",
+ "modified": "2024-08-07 09:15:55.559143",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Payment Management",

@@ -5,6 +5,9 @@ frappe.ui.form.on('Patient Encounter', {
     custom_get_bills: function(frm) {
         update_items_table(frm);
     },
+    custom_view_traige: function(frm) {
+        viewTriage(frm);
+    },
 });
 
 
@@ -69,3 +72,4 @@ function update_items_table(frm) {
         }
     });
 }
+

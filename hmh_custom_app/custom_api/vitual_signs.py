@@ -17,7 +17,7 @@ def create_vital_signs_for_patient(doc, method=None):
                 "custom_practionaer": doc.custom_consulting_doctor,
                 "custom_patient_status": "Seen The Receptionist",
                 "custom_customer_type": doc.customer_group,
-                "custom_invoice_no": doc.custom_invoice_no 
+                "custom_invoice_no": doc.custom_invoice_no,
             })
             vital_signs.insert(ignore_permissions=True)
         except Exception as e:

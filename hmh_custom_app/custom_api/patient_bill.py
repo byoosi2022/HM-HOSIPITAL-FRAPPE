@@ -23,16 +23,29 @@ def on_submit(doc, method):
             if not receivable_account:
                 frappe.throw(_("Default Receivable Account is not set for the company {0} or the customer group {1}").format(doc.company, customer.customer_group))
             
-            # Create a new Sales Invoice
-            sales_invoice = frappe.new_doc("Sales Invoice")
-            sales_invoice.customer = patient_doc.customer
-            sales_invoice.patient = doc.patient  # Assuming patient is linked to customer
-            sales_invoice.posting_date = doc.encounter_date
-            sales_invoice.due_date = doc.encounter_date
-            sales_invoice.cost_center = doc.custom_cost_center
-            sales_invoice.custom_patient_ecounter_id = doc.name
-            sales_invoice.debit_to = receivable_account
-            sales_invoice.items = []
+            # Check if there is an existing draft Sales Invoice for the same encounter
+            existing_invoice = frappe.get_all("Sales Invoice", 
+                                              filters={
+                                                  "custom_patient_ecounter_id": doc.name,
+                                                  "docstatus": 0  # Draft status
+                                              }, 
+                                              limit=1)
+            
+            if existing_invoice:
+                # Update the existing draft Sales Invoice
+                sales_invoice = frappe.get_doc("Sales Invoice", existing_invoice[0].name)
+                sales_invoice.items = []  # Clear existing items
+            else:
+                # Create a new Sales Invoice
+                sales_invoice = frappe.new_doc("Sales Invoice")
+                sales_invoice.customer = patient_doc.customer
+                sales_invoice.patient = doc.patient  # Assuming patient is linked to customer
+                sales_invoice.posting_date = doc.encounter_date
+                sales_invoice.due_date = doc.encounter_date
+                sales_invoice.cost_center = doc.custom_cost_center
+                sales_invoice.custom_patient_ecounter_id = doc.name
+                sales_invoice.debit_to = receivable_account
+                sales_invoice.items = []
             
             for item in doc.custom_items:
                 if not item.item or not item.qty or not item.rate:
@@ -46,13 +59,11 @@ def on_submit(doc, method):
                     "cost_center": doc.custom_cost_center,
                 })
                 
-                frappe.msgprint(_(str(receivable_account)))
-            
-            # Insert the Sales Invoice as a draft
-            sales_invoice.insert(ignore_permissions=True)
+            # Save or update the Sales Invoice as a draft
+            sales_invoice.save(ignore_permissions=True)
             
             # Notify user
-            frappe.msgprint(_("Sales Invoice {0} created successfully.").format(sales_invoice.name))
+            # frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
         
         except frappe.ValidationError as e:
             frappe.db.rollback()
