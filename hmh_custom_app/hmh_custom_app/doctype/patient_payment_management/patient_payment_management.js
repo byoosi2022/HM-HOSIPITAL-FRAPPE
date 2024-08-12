@@ -7,6 +7,7 @@ frappe.ui.form.on('Patient Payment Management', {
         populateInvoiceTableDraftes(frm);
     },
     on_submit: async function(frm) {
+        // update_patient_bill_status(frm)
         const success = await submitPayments(frm);
         if (!success) {
             frappe.validated = false; // Prevent the form from saving
@@ -114,6 +115,32 @@ function update_patient_bill_status(frm) {
             'custom_payment_id': frm.doc.patient
         },
         callback: function(response) {
+            if (response.message) {
+                frappe.msgprint(response.message); custom_patient_ecounter_id
+            }
+        }
+    });
+
+    frappe.call({
+        method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
+        args: {
+            'custom_payment_id': frm.doc.patient
+        },
+        callback: function(response) {
+            // console.log(response)
+            if (response.message) {
+                frappe.msgprint(response.message);
+            }
+        }
+    });
+
+    frappe.call({
+        method: 'hmh_custom_app.doctor_jouney_prescription.update_drug_status.update_drugs_payment_status',
+        args: {
+            'custom_payment_id': frm.doc.patient
+        },
+        callback: function(response) {
+            console.log(response)
             if (response.message) {
                 frappe.msgprint(response.message);
             }

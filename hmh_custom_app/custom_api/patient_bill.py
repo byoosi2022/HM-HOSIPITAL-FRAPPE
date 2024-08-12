@@ -34,14 +34,19 @@ def on_submit(doc, method):
             if existing_invoice:
                 # Update the existing draft Sales Invoice
                 sales_invoice = frappe.get_doc("Sales Invoice", existing_invoice[0].name)
+                sales_invoice.set_posting_time = 1
+                sales_invoice.cost_center = doc.custom_cost_center
+                sales_invoice.posting_date = doc.encounter_date
+                sales_invoice.due_date = max(doc.custom_due_date, doc.encounter_date) 
                 sales_invoice.items = []  # Clear existing items
             else:
                 # Create a new Sales Invoice
                 sales_invoice = frappe.new_doc("Sales Invoice")
                 sales_invoice.customer = patient_doc.customer
                 sales_invoice.patient = doc.patient  # Assuming patient is linked to customer
+                sales_invoice.set_posting_time = 1
                 sales_invoice.posting_date = doc.encounter_date
-                sales_invoice.due_date = doc.encounter_date
+                sales_invoice.due_date = max(doc.custom_due_date, doc.encounter_date)  # Ensure due date is not before posting date
                 sales_invoice.cost_center = doc.custom_cost_center
                 sales_invoice.custom_patient_ecounter_id = doc.name
                 sales_invoice.debit_to = receivable_account
@@ -63,7 +68,7 @@ def on_submit(doc, method):
             sales_invoice.save(ignore_permissions=True)
             
             # Notify user
-            # frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
+            frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
         
         except frappe.ValidationError as e:
             frappe.db.rollback()

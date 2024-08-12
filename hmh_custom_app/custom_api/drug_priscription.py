@@ -39,7 +39,9 @@ def on_submit(patient_encounter, selected_drug_code, dosage, period):
         selected_item_amount = flt(qty) * flt(rate)
         
         return {
-            'selected_item_amount': selected_item_amount
+            'selected_item_amount': selected_item_amount,
+            'qty': qty,
+            'rate': flt(rate),
         }
     
     except Exception as e:
