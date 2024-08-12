@@ -143,8 +143,12 @@ doc_events = {
     
     "Patient Encounter": {
         "on_update": [
-            "hmh_custom_app.custom_api.patient_bill.on_submit",
-            # "hmh_custom_app.custom_api.patient.validate_patient"
+            # working on the Lab prescription
+            "hmh_custom_app.custom_api.invoice_lab_tests.on_submit",
+            "hmh_custom_app.custom_api.encounter_insurance.update_lab_tests_payment_status",
+            # working on the Drup prescription
+            "hmh_custom_app.doctor_jouney_prescription.invoice_drug_prescription.on_submit",
+            "hmh_custom_app.doctor_jouney_prescription.encounter_insurance.update_drug_payment_status"
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },

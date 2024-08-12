@@ -1,0 +1,211 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-08-11 19:18:14.292100",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "patient",
+  "patient_name",
+  "patient_sex",
+  "patient_age",
+  "inpatient_record",
+  "inpatient_status",
+  "patient_encounter_id",
+  "column_break_6",
+  "company",
+  "encounter_date",
+  "encounter_time",
+  "practitioner",
+  "practitioner_name",
+  "medical_department",
+  "sb_drug_prescription",
+  "drug_prescription",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "HLC-PHARM-.YYYY.-",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_standard_filter": 1,
+   "label": "Patient",
+   "options": "Patient",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "patient.patient_name",
+   "fieldname": "patient_name",
+   "fieldtype": "Data",
+   "label": "Patient Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "patient.sex",
+   "fieldname": "patient_sex",
+   "fieldtype": "Data",
+   "label": "Gender",
+   "options": "Gender",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patient_age",
+   "fieldtype": "Data",
+   "label": "Age",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "inpatient_record",
+   "fieldtype": "Link",
+   "label": "Inpatient Record",
+   "options": "Inpatient Record",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "inpatient_status",
+   "fieldtype": "Data",
+   "label": "Inpatient Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "default": "Today",
+   "fieldname": "encounter_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Encounter Date",
+   "reqd": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "encounter_time",
+   "fieldtype": "Time",
+   "label": "Encounter Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "practitioner",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Healthcare Practitioner",
+   "options": "Healthcare Practitioner",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "practitioner.practitioner_name",
+   "fieldname": "practitioner_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Practitioner Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "practitioner.department",
+   "fieldname": "medical_department",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_standard_filter": 1,
+   "label": "Department",
+   "options": "Medical Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_drug_prescription",
+   "fieldtype": "Section Break",
+   "label": "Medications"
+  },
+  {
+   "fieldname": "drug_prescription",
+   "fieldtype": "Table",
+   "label": "Drug Prescription",
+   "options": "Pharmacy Items"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Pharmacy",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "patient_encounter_id",
+   "fieldtype": "Link",
+   "label": "Patient Encounter ID",
+   "options": "Patient Encounter"
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-08-11 19:39:37.652093",
+ "modified_by": "Administrator",
+ "module": "HMH CUSTOM APP",
+ "name": "Pharmacy",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Physician",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "restrict_to_domain": "Healthcare",
+ "search_fields": "patient, practitioner, medical_department, encounter_date, encounter_time",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Orange",
+   "title": "Ordered"
+  },
+  {
+   "color": "Blue",
+   "title": "Completed"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "track_changes": 1,
+ "track_seen": 1
+}

@@ -1,7 +1,5 @@
 import frappe
 from frappe import _
-from frappe.model.document import Document
-
 @frappe.whitelist()
 def create_sales_invoice(patient_form):
     try:
