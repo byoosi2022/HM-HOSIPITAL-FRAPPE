@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_copy": 1,
  "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2024-08-11 19:18:14.292100",
@@ -15,18 +14,25 @@
   "patient_sex",
   "patient_age",
   "medical_department",
-  "inpatient_record",
-  "inpatient_status",
   "patient_encounter_id",
+  "sales_invoice_id",
   "column_break_6",
   "company",
   "encounter_date",
   "encounter_time",
   "practitioner",
   "practitioner_name",
+  "price_list",
+  "inpatient_status",
+  "inpatient_record",
+  "payment_status",
   "sb_drug_prescription",
   "drug_prescription",
-  "amended_from"
+  "amended_from",
+  "section_break_wbwo",
+  "total_qty",
+  "column_break_jlmr",
+  "total_amount"
  ],
  "fields": [
   {
@@ -160,11 +166,49 @@
    "fieldtype": "Link",
    "label": "Patient Encounter ID",
    "options": "Patient Encounter"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "section_break_wbwo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Float",
+   "label": "Total Qty"
+  },
+  {
+   "fieldname": "column_break_jlmr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "sales_invoice_id",
+   "fieldtype": "Link",
+   "label": "Sales Invoice Id",
+   "options": "Sales Invoice"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "payment_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Payment Status"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-12 17:16:10.306357",
+ "modified": "2024-08-13 11:03:26.444742",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Pharmacy",

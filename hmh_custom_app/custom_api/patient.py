@@ -80,8 +80,10 @@ def create_sales_invoice(patient_form):
 
 
 def create_vital_signs_for_patient(doc, method=None):
+    patient_doc = frappe.get_doc("Patient", doc.patient)
+    customer = frappe.get_doc("Customer", patient_doc.customer)
     # Check if the customer group is "Insurance" or the custom_bill_status is "Approved"
-    if doc.customer_group == "Insurance" or doc.custom_bill_status == "Approved":
+    if customer.customer_group == "Insurance" or doc.custom_bill_status == "Approved":
         # Check if a draft Vital Signs document already exists for this patient
         existing_vital_signs = frappe.get_all("Vital Signs", filters={
             "patient": doc.name,
@@ -97,7 +99,7 @@ def create_vital_signs_for_patient(doc, method=None):
                     "patient": doc.name,
                     "custom_practionaer": doc.custom_consulting_doctor,
                     "custom_patient_status": "Seen The Receptionist",
-                    "custom_customer_type": doc.customer_group,
+                    "custom_customer_type": customer.customer_group ,
                     "custom_invoice_no": doc.custom_invoice_no 
                 })
                 vital_signs.insert(ignore_permissions=True)
@@ -108,9 +110,10 @@ def create_vital_signs_for_patient(doc, method=None):
 def create_vital_signs_for_patient_frompayments(doc, method=None):
     # Fetch the patient document to check custom_bill_status
     patient_doc = frappe.get_doc('Patient', doc.patient)
+    customer = frappe.get_doc("Customer", patient_doc.customer)
 
     # Check if the customer group is "Insurance" or the custom_bill_status is "Approved"
-    if doc.customer_group == "Insurance" or patient_doc.custom_bill_status == "Approved":
+    if customer.customer_group == "Insurance" or patient_doc.custom_bill_status == "Approved":
         # Check if a draft Vital Signs document already exists for this patient
         existing_vital_signs = frappe.get_all("Vital Signs", filters={
             "patient": patient_doc.name,

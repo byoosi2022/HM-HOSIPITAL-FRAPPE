@@ -128,11 +128,6 @@ app_include_js = "/assets/hmh_custom_app/js/custom_js/vitals.js"
 # Hook on document methods and events
 
 doc_events = {
-    # "Patient Encounter": { hmh_custom_app.custom_api.patient.update_patient_bill_status
-    #     "on_update": "hmh_custom_app.custom_api.patient_encounter.on_saving",
-    #     # "on_cancel": "method",
-    #     # "on_trash": "method"
-    # },
     "Patient": {
         "on_update": [
             "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient",
@@ -141,32 +136,33 @@ doc_events = {
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
     
+    "Pharmacy": {
+        "on_submit": [
+            "hmh_custom_app.pharmacy_jouney.approved_invoice.on_submit",
+            # "hmh_custom_app.custom_api.patient.validate_patient"
+        ],
+        # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
+    },
+    
     "Patient Encounter": {
         "on_update": [
-            # working on the Lab prescription
+            # Lab prescription
             "hmh_custom_app.custom_api.invoice_lab_tests.on_submit",
             "hmh_custom_app.custom_api.encounter_insurance.update_lab_tests_payment_status",
-            # working on the Drup prescription
+            # Drug prescription
             "hmh_custom_app.doctor_jouney_prescription.invoice_drug_prescription.on_submit",
-            "hmh_custom_app.doctor_jouney_prescription.encounter_insurance.update_drug_payment_status"
+            # "hmh_custom_app.doctor_jouney_prescription.encounter_insurance.update_drug_payment_status"
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
 
-
     "Patient Payment Management": {
-        # "on_subbmit": [
-        #     "hmh_custom_app.custom_api.patient.update_patient_bill_status",
-            
-        # ],
-        "on_subbmit": [
+        "on_submit": [
             "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments",
             # "hmh_custom_app.custom_api.patient.update_patient_bill_status",
-            
-            ]
+        ]
     }
 }
-
 
 # Scheduled Tasks
 # ---------------

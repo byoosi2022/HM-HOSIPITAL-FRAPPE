@@ -5,19 +5,19 @@ from frappe import _
 def update_drug_payment_status(doc, method):
     # Get all Sales Invoices related to the patient and exclude cancelled and drafts
     invoices = frappe.get_all(
-        'Sales Invoice',
+        'Pharmacy',
         filters={
             'patient': doc.patient,
             'docstatus': 1  # Only includes submitted documents
         },
-        fields=['name', 'outstanding_amount', 'custom_patient_ecounter_id']
+        fields=['name', 'outstanding_amount', 'patient_encounter_id']
     )
     
     # Extract custom_patient_ecounter_id from invoices
-    encounter_ids = [invoice.custom_patient_ecounter_id for invoice in invoices if invoice.custom_patient_ecounter_id]
+    encounter_ids = [invoice.patient_encounter_id for invoice in invoices if invoice.patient_encounter_id]
     
     if not encounter_ids:
-        return "No encounters found."
+        return "No Pharmacy found."
 
     # Find the corresponding Patient Encounter documents
     encounters = frappe.get_all(
@@ -35,12 +35,12 @@ def update_drug_payment_status(doc, method):
 
         # Access the child table 'drug Prescription'
         for drug in patient_encounter.drug_prescription:
-            # Check if the drug is already Fully Paid
-            if drug.custom_drug_status != "Fully Paid" and patient_doc.customer_group == "Insurance":
+            # Check if the drug is already Send to Pharmacy
+            if drug.custom_drug_status != "Send to Pharmacy" and patient_doc.customer_group == "Insurance":
                 # Check if any invoice related to this encounter has no outstanding amount
                 matching_invoices = [invoice for invoice in invoices if invoice.custom_patient_ecounter_id == encounter.name]
                 if all(invoice.outstanding_amount <= 0 for invoice in matching_invoices):
-                    drug.custom_drug_status = "Fully Paid"
+                    drug.custom_drug_status = "Send to Pharmacy"
                     updated = True
                     investigations.append(drug)
                     

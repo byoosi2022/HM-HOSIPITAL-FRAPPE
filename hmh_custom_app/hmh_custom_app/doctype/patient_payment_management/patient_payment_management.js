@@ -6,7 +6,7 @@ frappe.ui.form.on('Patient Payment Management', {
         populateInvoiceTable(frm);
         populateInvoiceTableDraftes(frm);
     },
-    on_submit: async function(frm) {
+    before_save: async function(frm) {
         // update_patient_bill_status(frm)
         const success = await submitPayments(frm);
         if (!success) {
@@ -136,6 +136,19 @@ function update_patient_bill_status(frm) {
 
     frappe.call({
         method: 'hmh_custom_app.doctor_jouney_prescription.update_drug_status.update_drugs_payment_status',
+        args: {
+            'custom_payment_id': frm.doc.patient
+        },
+        callback: function(response) {
+            console.log(response)
+            if (response.message) {
+                frappe.msgprint(response.message);
+            }
+        }
+    });
+
+    frappe.call({
+        method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
         args: {
             'custom_payment_id': frm.doc.patient
         },

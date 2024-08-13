@@ -64,5 +64,16 @@
   "name": "Set Due Date",
   "script": "frappe.ui.form.on('Patient Encounter', {\r\n    encounter_date: function(frm) {\r\n        // Calculate the due date as posting date + 30 days\r\n        var postingDate = new Date(frm.doc.encounter_date);\r\n        postingDate.setDate(postingDate.getDate() + 30);\r\n        \r\n        // Format the date to YYYY-MM-DD\r\n        var dueDate = postingDate.toISOString().split('T')[0];\r\n\r\n        // Set the due date in the form\r\n        frm.set_value('custom_due_date', dueDate);\r\n    }\r\n});\r\n",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Encounter",
+  "enabled": 1,
+  "modified": "2024-08-13 14:50:34.902389",
+  "module": "HMH CUSTOM APP",
+  "name": "Wipe all",
+  "script": "frappe.ui.form.on('Patient Encounter', {\r\n    custom_remove_drug_status: function(frm) {\r\n     \r\n    wipe_custom_drug_status(frm);\r\n    \r\n    }\r\n});\r\n\r\nfunction wipe_custom_drug_status(frm) {\r\n    // Iterate through each item in the drug prescription\r\n    frm.doc.drug_prescription.forEach(function(item) {\r\n        // Set the `custom_drug_status` field to an empty value\r\n        item.custom_drug_status = '';\r\n    });\r\n    \r\n    // Refresh the field to reflect changes in the UI\r\n    frm.refresh_field('drug_prescription');\r\n    \r\n    // Optionally, save the document if you want to persist changes\r\n    frm.save();\r\n}\r\n",
+  "view": "Form"
  }
 ]
