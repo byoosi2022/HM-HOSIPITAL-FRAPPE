@@ -2,7 +2,7 @@ import frappe
 from frappe import _
 
 def on_submit(doc, method):
-    if doc.lab_test_prescription:
+    if doc.procedure_prescription:
         try:
             # Fetch the Patient document
             patient_doc = frappe.get_doc('Patient', doc.patient)
@@ -65,18 +65,18 @@ def on_submit(doc, method):
             # Flag to check if any item should be added
             has_items_to_add = False
 
-            for item in doc.lab_test_prescription:
-                if item.custom_lab_status == "Fully Paid":
+            for item in doc.procedure_prescription:
+                if item.custom_procedure_status == "Fully Paid":
                     # Skip items that are already paid
                     continue
                 
-                if not item.custom_item_code or not item.custom_amount:
+                if not item.procedure or not item.custom_amount:
                     frappe.log_error(f"Missing data in custom_items: {item.as_dict()}", "Sales Invoice Creation Error")
                     frappe.throw(_("Missing data for item {0}. Ensure that item code and amount are provided.").format(item.item))
                 
                 # Append item to the Sales Invoice
                 sales_invoice.append("items", {
-                    "item_code": item.custom_item_code,
+                    "item_code": item.procedure,
                     "qty": 1,
                     "rate": item.custom_amount,
                     "cost_center": doc.custom_cost_center,
@@ -98,22 +98,22 @@ def on_submit(doc, method):
                 investigations = []
                 # Check if the customer group is 'Insurance' and create a Lab Test
                 if customer.customer_group == "Insurance" or customer.custom_bill_status == "Bill Later":
-                    for lab_test in doc.lab_test_prescription:
-                        if lab_test.custom_lab_status != "Fully Paid":
-                            lab_test.custom_lab_status = "Fully Paid"
-                            investigations.append(lab_test)
+                    for procedure in doc.procedure_prescription:
+                        if procedure.custom_procedure_status != "Fully Paid":
+                            procedure.custom_procedure_status = "Fully Paid"
+                            investigations.append(procedure)
                             doc.save()
                             frappe.db.commit()  # Commit changes to the database
-                            # Create a new Lab Test document
-                            lab_test_doc = frappe.new_doc('Lab Test')
-                            lab_test_doc.template = lab_test.lab_test_code
-                            lab_test_doc.patient = patient_doc
-                            lab_test_doc.patient_sex = patient_doc.sex
-                            lab_test_doc.custom_encounter_id = doc.name
-                            lab_test_doc.date = doc.encounter_date
-                            lab_test_doc.practitioner = doc.practitioner
-                            lab_test_doc.invoiced = 1
-                            lab_test_doc.save()
+                              # Create a new Procedure document
+                            procedure_doc = frappe.new_doc('Clinical Procedure')
+                            procedure_doc.procedure_template = procedure.procedure  # Assuming lab_test has a field named lab_test_code
+                            procedure_doc.patient = patient_doc
+                            procedure_doc.custom_cost_center = patient_doc.custom_consulting_department
+                            procedure_doc.invoiced = 1
+                            procedure_doc.start_date = doc.encounter_date
+                            procedure_doc.practitioner = doc.practitioner
+                            procedure_doc.custom_patient_encount_id = doc.name  # Use the encounter_id passed to the function
+                            procedure_doc.save()
                             frappe.db.commit()  # Commit changes to the database
 
         except frappe.ValidationError as e:

@@ -109,46 +109,60 @@ async function submitPayments(frm) {
 
 function update_patient_bill_status(frm) {
     // Call the server-side method to update patient bill status
-    frappe.call({
-        method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            if (response.message) {
-                frappe.msgprint(response.message); custom_patient_ecounter_id
-            }
-        }
-    });
+    // frappe.call({
+    //     method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
+    //     args: {
+    //         'custom_payment_id': frm.doc.patient
+    //     },
+    //     callback: function(response) {
+    //         if (response.message) {
+    //             frappe.msgprint(response.message); custom_patient_ecounter_id
+    //         }
+    //     }
+    // });
 
-    frappe.call({
-        method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            // console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
-            }
-        }
-    });
+    // frappe.call({
+    //     method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
+    //     args: {
+    //         'custom_payment_id': frm.doc.patient
+    //     },
+    //     callback: function(response) {
+    //         // console.log(response)
+    //         if (response.message) {
+    //             frappe.msgprint(response.message);
+    //         }
+    //     }
+    // });
 
-    frappe.call({
-        method: 'hmh_custom_app.doctor_jouney_prescription.update_drug_status.update_drugs_payment_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
-            }
-        }
-    });
+    // frappe.call({
+    //     method: 'hmh_custom_app.doctor_jouney_prescription.update_drug_status.update_drugs_payment_status',
+    //     args: {
+    //         'custom_payment_id': frm.doc.patient
+    //     },
+    //     callback: function(response) {
+    //         console.log(response)
+    //         if (response.message) {
+    //             frappe.msgprint(response.message);
+    //         }
+    //     }
+    // });
 
+    // frappe.call({
+    //     method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
+    //     args: {
+    //         'custom_payment_id': frm.doc.patient
+    //     },
+    //     callback: function(response) {
+    //         console.log(response)
+    //         if (response.message) {
+    //             frappe.msgprint(response.message);
+    //         }
+    //     }
+    // });
+
+    // working on procedures in the patient encounter
     frappe.call({
-        method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
+        method: 'hmh_custom_app.custom_api.procedures.update_procedure_status.update_procedure_payment_status',
         args: {
             'custom_payment_id': frm.doc.patient
         },

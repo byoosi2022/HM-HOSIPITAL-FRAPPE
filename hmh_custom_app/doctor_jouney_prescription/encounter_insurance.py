@@ -17,7 +17,8 @@ def update_drug_payment_status(doc, method):
     encounter_ids = [invoice.patient_encounter_id for invoice in invoices if invoice.patient_encounter_id]
     
     if not encounter_ids:
-        return "No Pharmacy found."
+        return
+        # return "No Pharmacy found."
 
     # Find the corresponding Patient Encounter documents
     encounters = frappe.get_all(
@@ -86,7 +87,7 @@ def create_pharmacy(drug, patient, encounter_id,date,practitioner):
      
     })
     # Logging for debugging
-    frappe.log_error(f"Lab Test Doc Values: {pharmacy_doc.as_dict()}", "Lab Test Doc Debug")
+    frappe.log_error(f"Pharmacy Doc Values: {pharmacy_doc.as_dict()}", "Pharmacy Doc Debug")
 
     pharmacy_doc.insert()
     frappe.db.commit()  # Commit changes to the database

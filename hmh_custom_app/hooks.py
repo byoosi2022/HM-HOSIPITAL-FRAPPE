@@ -151,7 +151,9 @@ doc_events = {
             "hmh_custom_app.custom_api.encounter_insurance.update_lab_tests_payment_status",
             # Drug prescription
             "hmh_custom_app.doctor_jouney_prescription.invoice_drug_prescription.on_submit",
-            # "hmh_custom_app.doctor_jouney_prescription.encounter_insurance.update_drug_payment_status"
+            # procedures
+            "hmh_custom_app.custom_api.procedures.invoice_procedures.on_submit",
+            "hmh_custom_app.custom_api.procedures.encounter_insurance.update_procedure_payment_status",
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },

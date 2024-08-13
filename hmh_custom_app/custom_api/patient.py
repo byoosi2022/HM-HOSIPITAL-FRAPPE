@@ -80,7 +80,7 @@ def create_sales_invoice(patient_form):
 
 
 def create_vital_signs_for_patient(doc, method=None):
-    patient_doc = frappe.get_doc("Patient", doc.patient)
+    patient_doc = frappe.get_doc("Patient", doc.name)
     customer = frappe.get_doc("Customer", patient_doc.customer)
     # Check if the customer group is "Insurance" or the custom_bill_status is "Approved"
     if customer.customer_group == "Insurance" or doc.custom_bill_status == "Approved":

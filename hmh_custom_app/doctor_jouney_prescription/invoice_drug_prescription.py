@@ -88,8 +88,8 @@ def on_submit(doc, method):
             doc.save(ignore_permissions=True)
             
             frappe.msgprint(_("Pharmacy Doc {0} created/updated successfully.").format(pharmacy_doc.name))
-        else:
-            frappe.msgprint(_("No valid Prescriptions found"), raise_exception=False)
+        # else:
+        #     frappe.msgprint(_("No valid Prescriptions found"), raise_exception=False)
 
     except frappe.ValidationError as e:
         frappe.db.rollback()
