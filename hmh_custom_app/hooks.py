@@ -154,6 +154,10 @@ doc_events = {
             # procedures
             "hmh_custom_app.custom_api.procedures.invoice_procedures.on_submit",
             "hmh_custom_app.custom_api.procedures.encounter_insurance.update_procedure_payment_status",
+            
+            # Radiology
+            "hmh_custom_app.custom_api.radiology.invoice_radiology.on_submit",
+            "hmh_custom_app.custom_api.radiology.encounter_insurance.update_radiology_payment_status",
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
