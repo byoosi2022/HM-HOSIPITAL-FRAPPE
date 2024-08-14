@@ -63,7 +63,7 @@ function populateInvoiceTable(frm) {
                     // Set the total outstanding amount
                     frm.set_value('total_outstandings', totalOutstandingAmount);
                 } else {
-                    frappe.msgprint(__('No invoices found with the given filters.'));
+                    // frappe.msgprint(__('No invoices found with the given filters.'));
                     frm.set_value('total_outstandings', 0);
                 }
             },
