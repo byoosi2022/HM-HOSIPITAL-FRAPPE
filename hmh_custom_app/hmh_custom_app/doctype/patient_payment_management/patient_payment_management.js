@@ -46,6 +46,8 @@ function populateInvoiceTable(frm) {
             },
             callback: function(response) {
                 const invoices = response.message.Invoices;
+                const totalOutstandingAmount = response.message['Total Outstanding Amount'];
+
                 if (invoices && invoices.length > 0) {
                     // Add rows to the child table
                     invoices.forEach(invoice => {
@@ -57,8 +59,12 @@ function populateInvoiceTable(frm) {
 
                     // Refresh the child table
                     frm.refresh_field('invoice_details');
+
+                    // Set the total outstanding amount
+                    frm.set_value('total_outstandings', totalOutstandingAmount);
                 } else {
                     frappe.msgprint(__('No invoices found with the given filters.'));
+                    frm.set_value('total_outstandings', 0);
                 }
             },
             error: function(error) {
@@ -148,7 +154,7 @@ function update_patient_bill_status(frm) {
     //         }
     //     }
     // });
-    
+
     // working on pharmacy in the patient encounter
     frappe.call({
         method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
@@ -226,7 +232,7 @@ function populateInvoiceTableDraftes(frm) {
                     // Refresh the child table
                     frm.refresh_field('invoice_awaiting');
                 } else {
-                    frappe.msgprint(__('No invoices found with the given filters.'));
+                    // frappe.msgprint(__('No invoices found with the given filters.'));
                 }
             },
             error: function(error) {

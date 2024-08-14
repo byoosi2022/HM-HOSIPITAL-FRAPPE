@@ -222,20 +222,30 @@ def get_sales_invoices_with_totals(cost_center=None, posting_date=None, patient=
             frappe.logger().info("No sales invoices found with the given filters")
             return {
                 "Invoices": [],
+                "Total Outstanding Amount": 0
             }
+
+        # Calculate the total outstanding amount
+        total_outstanding = sum(invoice['outstanding_amount'] for invoice in sales_invoices)
+
+        # Log total outstanding amount
+        frappe.logger().info(f"Total outstanding amount: {total_outstanding}")
 
         # Prepare the response
         result = {
-            "Invoices": sales_invoices
+            "Invoices": sales_invoices,
+            "Total Outstanding Amount": total_outstanding
         }
 
         # Log final result
         frappe.logger().info(f"Final result: {result}")
+        
         # Return the list of invoices with their outstanding amount and posting date
         return result
 
     except Exception as e:
         frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))
+
 
 @frappe.whitelist()
 def collect_invoices(patient):
