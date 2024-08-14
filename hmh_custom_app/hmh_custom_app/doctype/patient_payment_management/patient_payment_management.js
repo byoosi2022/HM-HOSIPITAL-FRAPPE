@@ -148,6 +148,7 @@ function update_patient_bill_status(frm) {
     //         }
     //     }
     // });
+    
     // working on pharmacy in the patient encounter
     frappe.call({
         method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
