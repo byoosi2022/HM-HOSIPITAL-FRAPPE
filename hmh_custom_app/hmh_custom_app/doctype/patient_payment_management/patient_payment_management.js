@@ -6,7 +6,7 @@ frappe.ui.form.on('Patient Payment Management', {
         populateInvoiceTable(frm);
         populateInvoiceTableDraftes(frm);
     },
-    before_save: async function(frm) {
+    on_submit: async function(frm) {
         // update_patient_bill_status(frm)
         const success = await submitPayments(frm);
         if (!success) {
