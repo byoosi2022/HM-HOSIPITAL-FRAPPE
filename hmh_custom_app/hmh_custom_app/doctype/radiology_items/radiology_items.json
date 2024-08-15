@@ -11,12 +11,14 @@
   "radiology_investigation",
   "item_code",
   "radiology_status",
+  "results_status",
   "amount",
   "invoiced",
   "column_break_4",
   "lab_test_comment",
   "radiology_investigation_name",
-  "lab_test_created"
+  "lab_test_created",
+  "observe_id"
  ],
  "fields": [
   {
@@ -88,11 +90,23 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Item Code"
+  },
+  {
+   "fieldname": "results_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Results Status"
+  },
+  {
+   "fieldname": "observe_id",
+   "fieldtype": "Link",
+   "label": "Observe ID",
+   "options": "Observation"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2024-08-14 16:03:29.122902",
+ "modified": "2024-08-15 16:04:38.335076",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Radiology Items",

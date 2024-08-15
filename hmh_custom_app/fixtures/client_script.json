@@ -75,5 +75,49 @@
   "name": "Wipe all",
   "script": "frappe.ui.form.on('Patient Encounter', {\r\n    custom_remove_drug_status: function(frm) {\r\n     \r\n    wipe_custom_drug_status(frm);\r\n    \r\n    }\r\n});\r\n\r\nfunction wipe_custom_drug_status(frm) {\r\n    // Iterate through each item in the drug prescription\r\n    frm.doc.drug_prescription.forEach(function(item) {\r\n        // Set the `custom_drug_status` field to an empty value\r\n        item.custom_drug_status = '';\r\n    });\r\n    \r\n    // Refresh the field to reflect changes in the UI\r\n    frm.refresh_field('drug_prescription');\r\n    \r\n    // Optionally, save the document if you want to persist changes\r\n    frm.save();\r\n}\r\n",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lab Test",
+  "enabled": 1,
+  "modified": "2024-08-15 15:22:54.774107",
+  "module": "HMH CUSTOM APP",
+  "name": "Update status Lab",
+  "script": "frappe.ui.form.on('Lab Test', {\n    on_submit: function(frm) {\n        update_lab_test_prescription(frm);\n       }\n    });\n\n\nfunction update_lab_test_prescription(frm) {\n    // Call the server-side method to update patient bill status\n    frappe.call({\n        method: 'hmh_custom_app.custom_api.labtest.lab_test.lab_status',\n        args: {\n            'docname': frm.doc.name\n        },\n        callback: function(response) {\n            console.log(response)\n            // if (response.message) {\n            //     frappe.msgprint(response.message); \n            // }\n        }\n    });\n}",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Encounter",
+  "enabled": 1,
+  "modified": "2024-08-15 17:27:30.430583",
+  "module": "HMH CUSTOM APP",
+  "name": "Href Results",
+  "script": "frappe.ui.form.on('Patient Encounter', {\r\n    refresh: function(frm) {\r\n        // Check if the form is loaded with lab_test_prescription table\r\n        if (frm.doc.lab_test_prescription && frm.fields_dict['lab_test_prescription']) {\r\n            frm.doc.lab_test_prescription.forEach(function(row) {\r\n                if (row.custom_results_status === \"Results Ready\") {\r\n                    // Get the row element in the grid\r\n                    let row_element = frm.fields_dict['lab_test_prescription'].grid.get_row(row.name).row;\r\n                    \r\n                    // Create a clickable span element\r\n                    let clickable_span = $(`<span style=\"color:blue;cursor:pointer;\">${row.custom_results_status}</span>`);\r\n\r\n                    // Attach the click event to navigate to the lab test document\r\n                    clickable_span.on('click', function() {\r\n                        frappe.set_route('Form', 'Lab Test', row.custom_labtest_id);\r\n                    });\r\n\r\n                    // Replace the text in the grid with the clickable span\r\n                    $(row_element).find(`[data-fieldname=\"custom_results_status\"]`).html(clickable_span);\r\n                }\r\n            });\r\n        }\r\n\r\n        // Check if the form is loaded with custom_radiology_items table\r\n        if (frm.doc.custom_radiology_items && frm.fields_dict['custom_radiology_items']) {\r\n            frm.doc.custom_radiology_items.forEach(function(row) {\r\n                if (row.results_status === \"Results Ready\") {\r\n                    // Get the row element in the grid\r\n                    let row_element = frm.fields_dict['custom_radiology_items'].grid.get_row(row.name).row;\r\n                    \r\n                    // Create a clickable span element\r\n                    let clickable_span = $(`<span style=\"color:blue;cursor:pointer;\">${row.results_status}</span>`);\r\n\r\n                    // Attach the click event to navigate to the observation test document\r\n                    clickable_span.on('click', function() {\r\n                        frappe.set_route('Form', 'Observation', row.observe_id);\r\n                    });\r\n\r\n                    // Replace the text in the grid with the clickable span\r\n                    $(row_element).find(`[data-fieldname=\"results_status\"]`).html(clickable_span);\r\n                }\r\n            });\r\n        }\r\n\r\n        // Check if the form is loaded with procedure_prescription table\r\n        if (frm.doc.procedure_prescription && frm.fields_dict['procedure_prescription']) {\r\n            frm.doc.procedure_prescription.forEach(function(row) {\r\n                if (row.custom_proceding_status === \"Results Ready\") {\r\n                    // Get the row element in the grid\r\n                    let row_element = frm.fields_dict['procedure_prescription'].grid.get_row(row.name).row;\r\n                    \r\n                    // Create a clickable span element\r\n                    let clickable_span = $(`<span style=\"color:blue;cursor:pointer;\">${row.custom_proceding_status}</span>`);\r\n\r\n                    // Attach the click event to navigate to the Procedure test document\r\n                    clickable_span.on('click', function() {\r\n                        frappe.set_route('Form', 'Clinical Procedure', row.custom_procedure_id);\r\n                    });\r\n\r\n                    // Replace the text in the grid with the clickable span\r\n                    $(row_element).find(`[data-fieldname=\"custom_proceding_status\"]`).html(clickable_span);\r\n                }\r\n            });\r\n        }\r\n    }\r\n});\r\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Observation",
+  "enabled": 1,
+  "modified": "2024-08-15 16:35:42.429695",
+  "module": "HMH CUSTOM APP",
+  "name": "Update Obseve  Status",
+  "script": "frappe.ui.form.on('Observation', {\n    on_submit: function(frm) {\n        update_custom_radiology_items(frm);\n       }\n    });\n\n\nfunction update_custom_radiology_items(frm) {\n    // Call the server-side method to update patient bill status\n    frappe.call({\n        method: 'hmh_custom_app.custom_api.labtest.radiology.radiology_status',\n        args: {\n            'docname': frm.doc.name\n        },\n        callback: function(response) {\n            console.log(response)\n            if (response.message) {\n                frappe.msgprint(response.message); \n            }\n        }\n    });\n}",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Clinical Procedure",
+  "enabled": 1,
+  "modified": "2024-08-15 17:50:41.787604",
+  "module": "HMH CUSTOM APP",
+  "name": "Procedure Status Update",
+  "script": "frappe.ui.form.on('Clinical Procedure', {\r\n    refresh: function(frm) {\r\n        // Check if the status is 'Completed' and add a button to update prescriptions\r\n        if (frm.doc.status === 'Completed' && frm.doc.docstatus === 1) {\r\n                frm.add_custom_button(__('Send Results To Doctor'), function() {\r\n                update_procedure_prescription(frm);\r\n            });\r\n        }\r\n    },\r\n     on_submit: function(frm) {\r\n        update_procedure_prescription(frm);\r\n       }\r\n    \r\n});\r\n\r\nfunction update_procedure_prescription(frm) {\r\n    // Call the server-side method to update patient prescription status\r\n    frappe.call({\r\n        method: 'hmh_custom_app.custom_api.labtest.procedure.procedure_status',\r\n        args: {\r\n            'docname': frm.doc.name\r\n        },\r\n        callback: function(response) {\r\n            console.log(response);\r\n            if (response.message) {\r\n                frappe.msgprint(response.message); \r\n            }\r\n        }\r\n    });\r\n}\r\n",
+  "view": "Form"
  }
 ]

@@ -40,6 +40,7 @@ def update_lab_tests_payment_status(custom_payment_id):
                 matching_invoices = [invoice for invoice in invoices if invoice.custom_patient_ecounter_id == encounter.name]
                 if all(invoice.outstanding_amount <= 0 for invoice in matching_invoices):
                     lab_test.custom_lab_status = "Fully Paid"
+                    lab_test.custom_results_status = "Processing Results"
                     lab_test.invoiced = 1
                     updated = True
                     investigations.append(lab_test)
