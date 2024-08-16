@@ -70,7 +70,7 @@ def on_submit(doc, method):
                     # Skip items that are already paid
                     continue
                 
-                if not item.procedure or not item.custom_amount:
+                if not item.custom_item_code or not item.custom_amount:
                     frappe.log_error(f"Missing data in custom_items: {item.as_dict()}", "Sales Invoice Creation Error")
                     frappe.throw(_("Missing data for item {0}. Ensure that item code and amount are provided.").format(item.item))
                 
