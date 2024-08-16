@@ -148,33 +148,50 @@ def get_sales_invoices(custom_payment_id):
 
 @frappe.whitelist()
 def update_patient_bill_status(custom_payment_id):
-    # Fetch all related Sales Invoices
-    invoices = get_sales_invoices(custom_payment_id)
-    
-    outstanding = False
-    for invoice in invoices:
-        if invoice['outstanding_amount'] > 0:
-            outstanding = True
-            break
-
-    # Find and update the corresponding Patient document
-    patients = frappe.get_all('Patient', filters={'name': custom_payment_id}, fields=['name'])
-    
-    if not patients:
-        return
-    
-    for patient in patients:
-        patient_doc = frappe.get_doc('Patient', patient.name)
-        current_status = patient_doc.custom_bill_status
+    try:
+        # Fetch all related Sales Invoices
+        invoices = get_sales_invoices(custom_payment_id)
         
-        # Update only if there is a change
-        new_status = 'Payments Pending' if outstanding else 'Approved'
-        if current_status != new_status:
-            patient_doc.custom_bill_status = new_status
-            patient_doc.save()
+        # Determine if there are outstanding invoices
+        outstanding = any(invoice['outstanding_amount'] > 0 for invoice in invoices)
 
-    # Commit the changes to the database
-    frappe.db.commit()
+        # Find the corresponding Patient document
+        patients = frappe.get_all('Patient', filters={'name': custom_payment_id}, fields=['name'])
 
-    return "Patient bill status updated successfully"
+        if not patients:
+            frappe.throw(_("No Patient found with the given ID: {0}").format(custom_payment_id))
+            return
+
+        for patient in patients:
+            patient_doc = frappe.get_doc('Patient', patient['name'])
+
+            # Fetch the Patient Registration Identification document
+            if not patient_doc.custom_patient_mrno:
+                frappe.throw(_("Patient Registration Identification is missing for patient: {0}").format(patient['name']))
+                return
+
+            reg_doc = frappe.get_doc('Patient Registration Identification', patient_doc.custom_patient_mrno)
+
+            # Determine the new status based on outstanding invoices
+            new_status = 'Payments Pending' if outstanding else 'Approved'
+
+            # Update the patient's bill status if it has changed
+            if patient_doc.custom_bill_status != new_status:
+                patient_doc.custom_bill_status = new_status
+                patient_doc.save()
+
+                # Update the registration document if customer is empty
+                if not reg_doc.customer:
+                    reg_doc.customer = patient_doc.customer
+                    reg_doc.save()
+
+        # Commit the changes to the database
+        frappe.db.commit()
+
+        return "Patient bill status updated successfully"
+    
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), _("Error in updating patient bill status"))
+        frappe.throw(_("An error occurred while updating patient bill status: {0}").format(str(e)))
+
 
