@@ -76,7 +76,7 @@ def on_submit(doc, method):
                 
                 # Append item to the Sales Invoice
                 sales_invoice.append("items", {
-                    "item_code": item.procedure,
+                    "item_code": item.custom_item_code,
                     "qty": 1,
                     "rate": item.custom_amount,
                     "cost_center": doc.custom_cost_center,
