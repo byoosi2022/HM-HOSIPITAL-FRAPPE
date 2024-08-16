@@ -8,10 +8,11 @@
  "field_order": [
   "naming_series",
   "patient_name",
+  "date_of_birth",
   "full_age",
+  "age_summary",
   "month",
   "day",
-  "date_of_birth",
   "column_break_ldgz",
   "date",
   "time",
@@ -19,6 +20,7 @@
   "gender",
   "nin_no",
   "email",
+  "consulting_doctor",
   "section_break_ajgc",
   "patient_identification",
   "residence_tab",
@@ -62,6 +64,7 @@
    "fieldname": "full_age",
    "fieldtype": "Int",
    "label": "Full Age",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -179,12 +182,16 @@
   {
    "fieldname": "day",
    "fieldtype": "Int",
-   "label": "Day"
+   "hidden": 1,
+   "label": "Day",
+   "read_only": 1
   },
   {
    "fieldname": "month",
    "fieldtype": "Int",
-   "label": "Month"
+   "hidden": 1,
+   "label": "Month",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_ajgc",
@@ -199,18 +206,29 @@
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
-   "label": "Date of Birth",
-   "read_only": 1
+   "label": "Date of Birth"
   },
   {
    "fieldname": "email",
    "fieldtype": "Data",
    "label": "Email"
+  },
+  {
+   "fieldname": "age_summary",
+   "fieldtype": "Data",
+   "label": "Age in Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consulting_doctor",
+   "fieldtype": "Link",
+   "label": "Consulting Doctor",
+   "options": "Healthcare Practitioner"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-06 15:12:43.059812",
+ "modified": "2024-08-16 14:55:46.717792",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Registration Identification",
