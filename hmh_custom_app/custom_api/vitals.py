@@ -4,9 +4,10 @@ from frappe import _
 @frappe.whitelist()
 def create_patient_encounter(patient, encounter_date, vital_signs, practitioner, patient_name):
     try:
-        # Retrieve the Patient document
+        # Retrieve the Patient document 
         patient_doc = frappe.get_doc('Patient', patient)
         doc_vitals = frappe.get_doc('Vital Signs', vital_signs)
+        reg_doc = frappe.get_doc('Patient Registration Identification', patient_doc.custom_patient_mrno)
         
         # Get the cost center from the consulting doctor's profile
         cost_center = frappe.get_value('Healthcare Practitioner', patient_doc.custom_consulting_doctor, 'custom_cost_centre')
@@ -59,6 +60,7 @@ def create_patient_encounter(patient, encounter_date, vital_signs, practitioner,
             "status": "Open",
             "consultation_charge": patient_doc.custom_invoice_no,  # Ensure this field exists in Patient doctype
             "practitioner": practitioner,
+            "patient_age":reg_doc.age_summary,
             "custom_vitals_id": vital_signs  # Ensure this field exists in Patient Encounter doctype
         })
         
