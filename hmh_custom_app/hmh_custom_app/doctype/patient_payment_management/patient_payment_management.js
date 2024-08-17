@@ -243,3 +243,19 @@ function populateInvoiceTableDraftes(frm) {
     }
 }
 
+frappe.ui.form.on('Modes of Payment Items', {
+    paid_amount: function (frm, cdt, cdn) {
+        calculateTotalsPayment(frm);
+    },
+
+});
+
+function calculateTotalsPayment(frm) {
+    frm.set_value('total_paid_amount', "");
+    var total_amount = 0;
+    frm.doc.cash_items.forEach(function (item) {
+        total_amount += item.paid_amount;
+       });
+    frm.set_value('total_paid_amount', total_amount);
+    refresh_field('cash_items');
+}
