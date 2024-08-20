@@ -7,7 +7,7 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
     stock_entry_list = frappe.get_list('Stock Entry', filters={'custom_pharmacy_id': docname,'docstatus': 1}, fields=['name'])
     
     if stock_entry_list:
-        return {'status': 'exists', 'message': 'Stock Entry already exists'}
+        return {'status': 'exists', 'message': 'Items already Isued Please'}
     
     # Fetch the Pharmacy document
     pharmacy = frappe.get_doc('Pharmacy', docname)
