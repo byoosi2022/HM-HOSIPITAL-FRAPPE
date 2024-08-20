@@ -16,6 +16,7 @@
   "medical_department",
   "patient_encounter_id",
   "sales_invoice_id",
+  "store",
   "column_break_6",
   "company",
   "encounter_date",
@@ -26,6 +27,7 @@
   "inpatient_status",
   "inpatient_record",
   "payment_status",
+  "approval_status",
   "sb_drug_prescription",
   "drug_prescription",
   "amended_from",
@@ -204,11 +206,24 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Payment Status"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "store",
+   "fieldtype": "Link",
+   "label": "Store",
+   "options": "Warehouse"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "approval_status",
+   "fieldtype": "Data",
+   "label": "Approval Status"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-20 13:25:58.387988",
+ "modified": "2024-08-20 20:25:02.223580",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Pharmacy",

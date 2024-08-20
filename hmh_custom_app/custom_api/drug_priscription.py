@@ -12,7 +12,10 @@ def on_submit(patient_encounter, selected_drug_code, dosage, period):
         rate = frappe.get_value('Item Price', {'item_code': selected_drug_code, 'price_list': encounter.custom_price_list}, 'price_list_rate') or 0
         
         # Process dosage
-        dosage_total = sum(map(int, dosage.split('-')))
+        if '-' in dosage:
+            dosage_total = sum(map(int, dosage.split('-')))
+        else:
+            dosage_total = 1
         
         # Process period
         period_days = 0
@@ -58,7 +61,10 @@ def pharmacy_calculate(pharmacy, selected_drug_code, dosage, period):
         rate = frappe.get_value('Item Price', {'item_code': selected_drug_code, 'price_list': encounter.price_list}, 'price_list_rate') or 0
         
         # Process dosage
-        dosage_total = sum(map(int, dosage.split('-')))
+        if '-' in dosage:
+            dosage_total = sum(map(int, dosage.split('-')))
+        else:
+            dosage_total = 1
         
         # Process period
         period_days = 0
