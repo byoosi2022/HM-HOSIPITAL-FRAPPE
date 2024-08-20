@@ -43,7 +43,7 @@ def on_submit(doc, method):
                 custom_due_date = doc.custom_due_date or encounter_date
                 sales_invoice.due_date = max(custom_due_date, encounter_date)
                 
-                sales_invoice.items = []
+                # sales_invoice.items = []
             else:
                 # Create a new Sales Invoice
                 sales_invoice = frappe.new_doc("Sales Invoice")
@@ -95,7 +95,7 @@ def on_submit(doc, method):
             else:
                 # Save or update the Sales Invoice as a draft
                 sales_invoice.save(ignore_permissions=True)
-                sales_invoice.submit()
+                # sales_invoice.submit()
                 frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
                 
                 investigations = []
@@ -111,7 +111,7 @@ def on_submit(doc, method):
                             procedure_doc = frappe.new_doc('Clinical Procedure')
                             procedure_doc.procedure_template = procedure.procedure  # Assuming lab_test has a field named lab_test_code
                             procedure_doc.patient = patient_doc
-                            procedure_doc.custom_cost_center = patient_doc.custom_consulting_department
+                            procedure_doc.custom_cost_center = "Theatre - HMH"
                             procedure_doc.invoiced = 1
                             procedure_doc.start_date = doc.encounter_date
                             procedure_doc.practitioner = doc.practitioner

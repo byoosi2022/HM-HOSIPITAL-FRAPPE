@@ -67,7 +67,7 @@ def create_radiology(procedure, patient, encounter_id,date,practitioner,medical_
     procedure_doc = frappe.new_doc('Observation')
     procedure_doc.observation_template = procedure.radiology_investigation  # Assuming Radiology has a field named lab_test_code
     procedure_doc.patient = patient
-    procedure_doc.custom_cost_center = patient_doc.custom_consulting_department
+    procedure_doc.custom_cost_center = "Radiology - HMH"
     procedure_doc.invoiced = 1
     procedure_doc.posting_date = date
     procedure_doc.healthcare_practitioner = practitioner

@@ -6,25 +6,35 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "details_section",
+  "column_break_ccdk",
   "patient",
   "patient_name",
   "posting_date",
   "posting_time",
+  "currency",
   "column_break_dfrw",
   "naming_series",
   "due_date",
   "company",
   "cost_center",
-  "currency",
-  "section_break_rnkb",
-  "cash_items",
-  "total_paid_amount",
-  "amended_from",
+  "section_break_mser",
+  "sumbit_invoice",
+  "update_drafts",
+  "invoice_awaiting",
+  "update_totals",
+  "total_drafts",
+  "awaiting_payments",
+  "update_invoice_table",
+  "invoice_detailed_items",
+  "totals",
   "section_break_yfbf",
   "invoice_details",
   "total_outstandings",
-  "section_break_koyi",
-  "invoice_awaiting"
+  "section_break_qycy",
+  "cash_items",
+  "total_paid_amount",
+  "amended_from"
  ],
  "fields": [
   {
@@ -90,7 +100,6 @@
    "allow_on_submit": 1,
    "fieldname": "total_paid_amount",
    "fieldtype": "Currency",
-   "hidden": 1,
    "label": "Total Paid Amount"
   },
   {
@@ -100,21 +109,6 @@
    "options": "Company"
   },
   {
-   "fieldname": "section_break_rnkb",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Patient Payment Management",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
-  {
-   "collapsible": 1,
    "fieldname": "section_break_yfbf",
    "fieldtype": "Section Break",
    "label": "Outstanding Invoices Awaiting Payments"
@@ -122,6 +116,7 @@
   {
    "fieldname": "invoice_details",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Invoice Details",
    "options": "Invoice Items Details"
   },
@@ -134,12 +129,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
-   "fieldname": "section_break_koyi",
-   "fieldtype": "Section Break",
-   "label": "Invoices Awaiting to be Submitted"
-  },
-  {
    "fieldname": "invoice_awaiting",
    "fieldtype": "Table",
    "label": "Invoices Awaiting",
@@ -148,14 +137,85 @@
   {
    "fieldname": "total_outstandings",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Total Outstandings",
    "read_only": 1
+  },
+  {
+   "fieldname": "invoice_detailed_items",
+   "fieldtype": "Table",
+   "label": "Invoice Detailed Items",
+   "options": "Invoice Detailed Items",
+   "reqd": 1
+  },
+  {
+   "fieldname": "totals",
+   "fieldtype": "Currency",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "update_totals",
+   "fieldtype": "Button",
+   "label": "Update Totals"
+  },
+  {
+   "fieldname": "sumbit_invoice",
+   "fieldtype": "Button",
+   "label": "Sumbit Invoice"
+  },
+  {
+   "fieldname": "update_drafts",
+   "fieldtype": "Button",
+   "label": "Update Drafts"
+  },
+  {
+   "fieldname": "update_invoice_table",
+   "fieldtype": "Button",
+   "label": "Update Invoice Table"
+  },
+  {
+   "fieldname": "total_drafts",
+   "fieldtype": "Currency",
+   "label": "Total Drafts"
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "section_break_mser",
+   "fieldtype": "Section Break",
+   "label": "Drafts"
+  },
+  {
+   "fieldname": "column_break_ccdk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_qycy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "awaiting_payments",
+   "fieldtype": "Section Break",
+   "label": "Outstanding Invoices Awaiting Payments"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Patient Payment Management",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-14 17:45:49.907043",
+ "modified": "2024-08-20 14:55:01.632179",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Payment Management",

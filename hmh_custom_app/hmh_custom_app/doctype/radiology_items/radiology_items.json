@@ -18,7 +18,8 @@
   "lab_test_comment",
   "radiology_investigation_name",
   "lab_test_created",
-  "observe_id"
+  "observe_id",
+  "from_sales_invoice"
  ],
  "fields": [
   {
@@ -72,7 +73,6 @@
    "search_index": 1
   },
   {
-   "fetch_from": "radiology_investigation.rate",
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -102,11 +102,16 @@
    "fieldtype": "Link",
    "label": "Observe ID",
    "options": "Observation"
+  },
+  {
+   "fieldname": "from_sales_invoice",
+   "fieldtype": "Data",
+   "label": "From Sales Invoice"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2024-08-15 16:04:38.335076",
+ "modified": "2024-08-20 10:34:53.716668",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Radiology Items",

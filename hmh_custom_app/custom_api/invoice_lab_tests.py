@@ -60,7 +60,7 @@ def on_submit(doc, method):
                 sales_invoice.cost_center = doc.custom_cost_center
                 sales_invoice.custom_patient_ecounter_id = doc.name
                 sales_invoice.debit_to = receivable_account
-                sales_invoice.items = []
+                # sales_invoice.items = []
 
             # Flag to check if any item should be added
             has_items_to_add = False
@@ -92,7 +92,7 @@ def on_submit(doc, method):
             else:
                 # Save or update the Sales Invoice as a draft
                 sales_invoice.save(ignore_permissions=True)
-                sales_invoice.submit()
+                # sales_invoice.submit()
                 frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
                 
                 investigations = []

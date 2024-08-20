@@ -498,3 +498,161 @@ def get_sales_invoices_with_drafts(cost_center=None, posting_date=None, patient=
 
     except Exception as e:
         frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))
+
+@frappe.whitelist()
+def get_sales_invoices_with_drafts_itemgroup(cost_center=None, posting_date=None, patient=None):
+    try:
+        # Log filter criteria
+        frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
+
+        # Define filters
+        filters = {"docstatus": 0, "outstanding_amount": [">", 0]}
+        if cost_center:
+            filters["cost_center"] = cost_center
+        if patient:
+            filters["patient"] = patient
+
+        # Fetch sales invoices with specified fields
+        sales_invoices = frappe.get_all(
+            "Sales Invoice",
+            filters=filters,
+            fields=["name", "posting_date", "outstanding_amount", "cost_center", "patient"]
+        )
+
+        # Log fetched sales invoices
+        frappe.logger().info(f"Fetched {len(sales_invoices)} sales invoices")
+
+        if not sales_invoices:
+            frappe.logger().info("No sales invoices found with the given filters")
+            return {
+                "Invoices": [],
+                "Item Group Totals": []
+            }
+
+        # Prepare to group items by item group and calculate totals
+        item_group_totals = {}
+
+        # Iterate through the fetched invoices
+        for invoice in sales_invoices:
+            # Fetch items for each invoice
+            invoice_items = frappe.get_all(
+                "Sales Invoice Item",
+                filters={"parent": invoice["name"]},
+                fields=["item_code", "amount"]
+            )
+
+            # Group items by item group and sum their amounts
+            for item in invoice_items:
+                item_group = item["item_code"]
+                amount = item["amount"]
+                if item_group not in item_group_totals:
+                    item_group_totals[item_group] = {
+                        "total_amount": 0,
+                        "invoices": []
+                    }
+                item_group_totals[item_group]["total_amount"] += amount
+                if invoice["name"] not in item_group_totals[item_group]["invoices"]:
+                    item_group_totals[item_group]["invoices"].append(invoice["name"])
+
+        # Prepare the response
+        result = {
+            "Invoices": sales_invoices,
+            "Item Group Totals": [
+                {
+                    "item_code": group,
+                    "total_amount": total["total_amount"],
+                    "invoice_ids": total["invoices"]
+                }
+                for group, total in item_group_totals.items()
+            ]
+        }
+
+        # Log final result
+        frappe.logger().info(f"Final result: {result}")
+        # Return the list of invoices with their outstanding amount and posting date, and grouped totals
+        return result
+
+    except Exception as e:
+        frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))
+
+@frappe.whitelist()
+def get_sales_invoices_with_totals_itemgroup(cost_center=None, posting_date=None, patient=None):
+    try:
+        # Log filter criteria
+        frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
+
+        # Define filters
+        filters = {"docstatus": 1, "outstanding_amount": [">", 0]}
+        if cost_center:
+            filters["cost_center"] = cost_center
+        if patient:
+            filters["patient"] = patient
+
+        # Fetch sales invoices with specified fields
+        sales_invoices = frappe.get_all(
+            "Sales Invoice",
+            filters=filters,
+            fields=["name", "posting_date", "outstanding_amount", "cost_center", "patient"]
+        )
+
+        # Log fetched sales invoices
+        frappe.logger().info(f"Fetched {len(sales_invoices)} sales invoices")
+
+        if not sales_invoices:
+            frappe.logger().info("No sales invoices found with the given filters")
+            return {
+                "Invoices": [],
+                "Total Outstanding Amount": 0,
+                "Item Group Totals": []
+            }
+
+        # Calculate the total outstanding amount
+        total_outstanding = sum(invoice['outstanding_amount'] for invoice in sales_invoices)
+
+        # Prepare to group items by item group and calculate totals
+        item_group_totals = []
+
+        # Iterate through the fetched invoices
+        for invoice in sales_invoices:
+            # Fetch items for each invoice
+            invoice_items = frappe.get_all(
+                "Sales Invoice Item",
+                filters={"parent": invoice["name"]},
+                fields=["item_code", "amount"]
+            )
+
+            # Group items by item group and sum their amounts
+            for item in invoice_items:
+                item_group = item["item_code"]
+                amount = item["amount"]
+
+                # Check if the item group already exists in the totals list
+                existing_group = next((group for group in item_group_totals if group["item_code"] == item_group and group["invoice_name"] == invoice["name"]), None)
+
+                if existing_group:
+                    existing_group["total_amount"] += amount
+                else:
+                    item_group_totals.append({
+                        "invoice_name": invoice["name"],
+                        "item_code": item_group,
+                        "total_amount": amount
+                    })
+
+        # Log total outstanding amount
+        frappe.logger().info(f"Total outstanding amount: {total_outstanding}")
+
+        # Prepare the response
+        result = {
+            "Invoices": sales_invoices,
+            "Total Outstanding Amount": total_outstanding,
+            "Item Group Totals": item_group_totals
+        }
+
+        # Log final result
+        frappe.logger().info(f"Final result: {result}")
+        
+        # Return the list of invoices with their outstanding amount and posting date, and grouped totals
+        return result
+
+    except Exception as e:
+        frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))

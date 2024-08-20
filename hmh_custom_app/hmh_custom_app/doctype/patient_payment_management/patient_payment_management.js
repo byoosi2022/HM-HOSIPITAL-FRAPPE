@@ -4,7 +4,20 @@
 frappe.ui.form.on('Patient Payment Management', {
     patient: function(frm) {
         populateInvoiceTable(frm);
-        populateInvoiceTableDraftes(frm);
+        populateInvoiceDetailedItemsDraftes(frm);
+        populateInvoiceDetailedItems(frm)
+    },
+    update_totals:function(frm){
+        calculateUpdateTotals(frm)
+    },
+    update_invoice_table:function(frm){
+        populateInvoiceDetailedItems(frm)
+    },
+    update_drafts:function(frm){
+        populateInvoiceDetailedItemsDraftes(frm);
+    },
+    sumbit_invoice:function(frm){
+        submit_unique_invoices(frm);
     },
     on_submit: async function(frm) {
         // update_patient_bill_status(frm)
@@ -45,6 +58,7 @@ function populateInvoiceTable(frm) {
                 patient: patient
             },
             callback: function(response) {
+                // console.log(response)
                 const invoices = response.message.Invoices;
                 const totalOutstandingAmount = response.message['Total Outstanding Amount'];
 
@@ -79,7 +93,7 @@ function populateInvoiceTable(frm) {
 async function submitPayments(frm) {
     try {
         const response = await frappe.call({
-            method: 'hmh_custom_app.custom_api.patient_payment.create_payments',
+            method: 'hmh_custom_app.custom_api.patient_payment.create_payments_mode',
             args: {
                 patient_payment: frm.doc.name
             },
@@ -212,13 +226,14 @@ function populateInvoiceTableDraftes(frm) {
     if (patient) {
         // Call the server-side method
         frappe.call({
-            method: 'hmh_custom_app.custom_api.sales_invoice.get_sales_invoices_with_drafts',
+            method: 'hmh_custom_app.custom_api.sales_invoice.get_sales_invoices_with_drafts_itemgroup',
             args: {
                 cost_center: cost_center,
                 posting_date: posting_date,
                 patient: patient
             },
             callback: function(response) {
+                console.log(response)
                 const invoices = response.message.Invoices;
                 if (invoices && invoices.length > 0) {
                     // Add rows to the child table
@@ -258,4 +273,145 @@ function calculateTotalsPayment(frm) {
        });
     frm.set_value('total_paid_amount', total_amount);
     refresh_field('cash_items');
+}
+
+
+function populateInvoiceDetailedItems(frm) {
+    // Clear the existing rows in the child table first
+    frm.clear_table('invoice_detailed_items');
+    frm.refresh_field('invoice_detailed_items');
+
+    // Get the filters
+    const cost_center = frm.doc.cost_center;
+    const posting_date = frm.doc.posting_date;
+    const patient = frm.doc.patient;
+
+    if (patient) {
+        // Call the server-side method
+        frappe.call({
+            method: 'hmh_custom_app.custom_api.sales_invoice.get_sales_invoices_with_totals_itemgroup',
+            args: {
+                cost_center: cost_center,
+                posting_date: posting_date,
+                patient: patient
+            },
+            callback: function(response) {
+                // console.log(response)
+                const item_codes = response.message['Item Group Totals'];
+                const totalOutstandingAmount = response.message['Total Outstanding Amount'];
+
+                if (item_codes && item_codes.length > 0) {
+                    // Add rows to the child table
+                    item_codes.forEach(item => {
+                        let child = frm.add_child('invoice_detailed_items');
+                        frappe.model.set_value(child.doctype, child.name, 'item', item.item_code);
+                        frappe.model.set_value(child.doctype, child.name, 'invoice', item.invoice_name);
+                        frappe.model.set_value(child.doctype, child.name, 'outstanding_amount', item.total_amount);
+                       
+                    });
+
+                    // Refresh the child table
+                    frm.refresh_field('invoice_detailed_items');
+
+                    // Set the total outstanding amount
+                    frm.set_value('totals', totalOutstandingAmount);
+                } else {
+                    // frappe.msgprint(__('No invoices found with the given filters.'));
+                    frm.set_value('total_outstandings', 0);
+                }
+            },
+            error: function(error) {
+                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                console.error(error);
+            }
+        });
+    }
+}
+
+
+
+function calculateUpdateTotals(frm) {
+    frm.set_value('totals', "");
+    var total_amount = 0;
+    frm.doc.invoice_detailed_items.forEach(function (item) {
+        total_amount += item.outstanding_amount;
+       });
+    frm.set_value('totals', total_amount);
+    refresh_field('invoice_detailed_items');
+}
+
+function populateInvoiceDetailedItemsDraftes(frm) {
+    // Clear the existing rows in the child table first
+    frm.clear_table('invoice_awaiting');
+    frm.refresh_field('invoice_awaiting');
+
+    // Get the filters
+    const cost_center = frm.doc.cost_center;
+    const posting_date = frm.doc.posting_date;
+    const patient = frm.doc.patient;
+
+    if (patient) {
+        // Call the server-side method
+        frappe.call({
+            method: 'hmh_custom_app.custom_api.sales_invoice.get_sales_invoices_with_drafts_itemgroup',
+            args: {
+                cost_center: cost_center,
+                posting_date: posting_date,
+                patient: patient
+            },
+            callback: function(response) {
+                console.log(response);
+                const invoices = response.message.Invoices;
+                const item_group = response.message['Item Group Totals'];
+
+                if (item_group && item_group.length > 0) {
+                    // Add rows to the child table
+                    item_group.forEach(item => {
+                        let child = frm.add_child('invoice_awaiting');
+                        frappe.model.set_value(child.doctype, child.name, 'invoice', item.invoice_ids.join(', '));
+                        frappe.model.set_value(child.doctype, child.name, 'item', item.item_code);
+                        frappe.model.set_value(child.doctype, child.name, 'outstanding_amount', item.total_amount);
+                    });
+
+                    // Refresh the child table
+                    frm.refresh_field('invoice_awaiting');
+                } else {
+                    frappe.msgprint(__('No item group totals found with the given filters.'));
+                }
+            },
+            error: function(error) {
+                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                console.error(error);
+            }
+        });
+    } else {
+        frappe.msgprint(__('Please select a patient.'));
+    }
+}
+
+// Function to submit the Sales Invoice
+
+function submit_unique_invoices(frm) {
+    frappe.call({
+        method: 'hmh_custom_app.custom_api.submit_doc.submit_unique_invoices',
+        args: {
+            parent_docname: frm.doc.name
+        },
+        callback: function(response) {
+            if (response.message.status === 'error') {
+                frappe.msgprint(__('Error: {0}', [response.message.message]));
+            } else {
+                let successMsg = __('Successfully submitted invoices: {0}', [response.message.submitted_invoices.join(', ')]);
+                if (response.message.failed_invoices.length > 0) {
+                    successMsg += '<br>' + __('Failed to submit invoices: {0}', [response.message.failed_invoices.join(', ')]);
+                }
+                frappe.msgprint(successMsg);
+                frm.reload_doc(); // Reload the form to reflect changes
+            }
+        },
+        error: function(err) {
+            frappe.msgprint(__('An error occurred while submitting invoices.'));
+            console.error(err);
+        }
+    });
 }
