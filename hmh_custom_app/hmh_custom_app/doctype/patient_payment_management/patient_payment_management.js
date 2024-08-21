@@ -128,97 +128,63 @@ async function submitPayments(frm) {
 }
 
 function update_patient_bill_status(frm) {
-    // Call the server-side method to update patient bill status
+    // Define the frappe.call requests sequentially to avoid the TimestampMismatchError
     frappe.call({
         method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
         args: {
             'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            if (response.message) {
-                frappe.msgprint(response.message); custom_patient_ecounter_id
-            }
         }
-    });
-    // working on lab test in the patient encounter
-    frappe.call({
-        method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            // console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
-            }
+    }).then((patientResponse) => {
+        if (patientResponse.message) {
+            frappe.msgprint(patientResponse.message);
         }
-    });
 
-    // working on Prescription in the patient encounter
-
-    // frappe.call({
-    //     method: 'hmh_custom_app.custom_api.stock.stock_isue.create_stock_entry',
-    //     args: {
-    //         docname: frm.doc.name,
-    //         warehouse: frm.doc.store,
-    //         posting_date: frm.doc.encounter_date,
-    //         posting_time: frm.doc.encounter_time,
-    //         patient: frm.doc.patient,
-    //         cost_center: frm.doc.custom_cost_center,
-    //     },
-    //     callback: function(response) {
-    //         if (response.message.status === 'exists') {
-    //             frappe.msgprint(response.message.message);
-    //             console.log('Stock Entry already exists');
-    //         } else if (response.message.status === 'created') {
-    //             frappe.msgprint('Stock Entry created successfully.');
-    //             // frappe.set_route('Form', 'Stock Entry', response.message.name);
-    //         } else if (response.message.status === 'error') {
-    //             frappe.msgprint(response.message.message);
-    //         }
-    //     }
-    // });
-
-    // working on pharmacy in the patient encounter
-    frappe.call({
-        method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
+        return frappe.call({
+            method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
+            args: {
+                'custom_payment_id': frm.doc.patient
             }
+        });
+    }).then((labTestResponse) => {
+        if (labTestResponse.message) {
+            frappe.msgprint(labTestResponse.message);
         }
-    });
 
-    // working on procedures in the patient encounter
-    frappe.call({
-        method: 'hmh_custom_app.custom_api.procedures.update_procedure_status.update_procedure_payment_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
+        return frappe.call({
+            method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
+            args: {
+                'custom_payment_id': frm.doc.patient
             }
+        });
+    }).then((pharmacyResponse) => {
+        if (pharmacyResponse.message) {
+            frappe.msgprint(pharmacyResponse.message);
         }
-    });
 
-    // working on radiology in the patient encounter
-    frappe.call({
-        method: 'hmh_custom_app.custom_api.radiology.update_radiology_status.update_rediology_payment_status',
-        args: {
-            'custom_payment_id': frm.doc.patient
-        },
-        callback: function(response) {
-            console.log(response)
-            if (response.message) {
-                frappe.msgprint(response.message);
+        return frappe.call({
+            method: 'hmh_custom_app.custom_api.procedures.update_procedure_status.update_procedure_payment_status',
+            args: {
+                'custom_payment_id': frm.doc.patient
             }
+        });
+    }).then((procedureResponse) => {
+        if (procedureResponse.message) {
+            frappe.msgprint(procedureResponse.message);
         }
+
+        return frappe.call({
+            method: 'hmh_custom_app.custom_api.radiology.update_radiology_status.update_rediology_payment_status',
+            args: {
+                'custom_payment_id': frm.doc.patient
+            }
+        });
+    }).then((radiologyResponse) => {
+        if (radiologyResponse.message) {
+            frappe.msgprint(radiologyResponse.message);
+        }
+    }).catch((error) => {
+        frappe.msgprint(__('An error occurred while updating the statuses.'));
+        console.error(error);
     });
 }
 
