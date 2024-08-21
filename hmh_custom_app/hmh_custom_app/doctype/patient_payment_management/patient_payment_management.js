@@ -130,35 +130,24 @@ async function submitPayments(frm) {
 function update_patient_bill_status(frm) {
     // Define the frappe.call requests sequentially to avoid the TimestampMismatchError
     frappe.call({
-        method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
+        method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
         args: {
             'custom_payment_id': frm.doc.patient
         }
-    }).then((patientResponse) => {
-        if (patientResponse.message) {
-            frappe.msgprint(patientResponse.message);
-        }
-
-        return frappe.call({
-            method: 'hmh_custom_app.custom_api.update_labtest_status.update_lab_tests_payment_status',
-            args: {
-                'custom_payment_id': frm.doc.patient
-            }
-        });
     }).then((labTestResponse) => {
         if (labTestResponse.message) {
             frappe.msgprint(labTestResponse.message);
         }
 
         return frappe.call({
-            method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
+            method: 'hmh_custom_app.custom_api.radiology.update_radiology_status.update_rediology_payment_status',
             args: {
                 'custom_payment_id': frm.doc.patient
             }
         });
-    }).then((pharmacyResponse) => {
-        if (pharmacyResponse.message) {
-            frappe.msgprint(pharmacyResponse.message);
+    }).then((radiologyResponse) => {
+        if (radiologyResponse.message) {
+            frappe.msgprint(radiologyResponse.message);
         }
 
         return frappe.call({
@@ -173,14 +162,25 @@ function update_patient_bill_status(frm) {
         }
 
         return frappe.call({
-            method: 'hmh_custom_app.custom_api.radiology.update_radiology_status.update_rediology_payment_status',
+            method: 'hmh_custom_app.custom_api.patient.update_patient_bill_status',
             args: {
                 'custom_payment_id': frm.doc.patient
             }
         });
-    }).then((radiologyResponse) => {
-        if (radiologyResponse.message) {
-            frappe.msgprint(radiologyResponse.message);
+    }).then((patientResponse) => {
+        if (patientResponse.message) {
+            frappe.msgprint(patientResponse.message);
+        }
+
+        return frappe.call({
+            method: 'hmh_custom_app.pharmacy_jouney.approved_invoice.pharmacy_status',
+            args: {
+                'custom_payment_id': frm.doc.patient
+            }
+        });
+    }).then((pharmacyResponse) => {
+        if (pharmacyResponse.message) {
+            frappe.msgprint(pharmacyResponse.message);
         }
     }).catch((error) => {
         frappe.msgprint(__('An error occurred while updating the statuses.'));
