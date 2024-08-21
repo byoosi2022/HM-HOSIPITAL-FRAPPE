@@ -157,14 +157,24 @@ function update_patient_bill_status(frm) {
     // working on Prescription in the patient encounter
 
     // frappe.call({
-    //     method: 'hmh_custom_app.doctor_jouney_prescription.update_drug_status.update_drugs_payment_status',
+    //     method: 'hmh_custom_app.custom_api.stock.stock_isue.create_stock_entry',
     //     args: {
-    //         'custom_payment_id': frm.doc.patient
+    //         docname: frm.doc.name,
+    //         warehouse: frm.doc.store,
+    //         posting_date: frm.doc.encounter_date,
+    //         posting_time: frm.doc.encounter_time,
+    //         patient: frm.doc.patient,
+    //         cost_center: frm.doc.custom_cost_center,
     //     },
     //     callback: function(response) {
-    //         console.log(response)
-    //         if (response.message) {
-    //             frappe.msgprint(response.message);
+    //         if (response.message.status === 'exists') {
+    //             frappe.msgprint(response.message.message);
+    //             console.log('Stock Entry already exists');
+    //         } else if (response.message.status === 'created') {
+    //             frappe.msgprint('Stock Entry created successfully.');
+    //             // frappe.set_route('Form', 'Stock Entry', response.message.name);
+    //         } else if (response.message.status === 'error') {
+    //             frappe.msgprint(response.message.message);
     //         }
     //     }
     // });
@@ -415,3 +425,4 @@ function submit_unique_invoices(frm) {
         }
     });
 }
+

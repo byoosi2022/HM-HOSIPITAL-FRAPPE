@@ -7,19 +7,12 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "atendee",
+  "nok_name",
   "phone",
   "relationship",
   "referal"
  ],
  "fields": [
-  {
-   "fieldname": "atendee",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "NOK Name",
-   "reqd": 1
-  },
   {
    "fieldname": "phone",
    "fieldtype": "Phone",
@@ -42,11 +35,18 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "HLC-EMERG-.YYYY.-"
+  },
+  {
+   "fieldname": "nok_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "NOK Name",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-19 14:01:47.752456",
+ "modified": "2024-08-21 09:20:56.086283",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Emergency",

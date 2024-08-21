@@ -96,7 +96,7 @@ def on_submit(doc, method):
 
 @frappe.whitelist()
 def pharmacy_status(custom_payment_id):
-    # Get all Sales Invoices where custom_payment_id matches and exclude cancelled and drafts
+    # Get all Sales Invoices where custom_payment_id matches and exclude canceled and drafts
     invoices = frappe.get_all(
         'Sales Invoice',
         filters={
@@ -116,7 +116,7 @@ def pharmacy_status(custom_payment_id):
     pharmacies = frappe.get_all(
         'Pharmacy',
         filters={'name': ['in', pharmacy_ids]},
-        fields=['name', 'payment_status']
+        fields=['name', 'approval_status', 'payment_status', 'patient']
     )
 
     investigations = []
@@ -126,14 +126,57 @@ def pharmacy_status(custom_payment_id):
         patient_pharmacy = frappe.get_doc('Pharmacy', pharmacy.name)
         updated = False
         
+        # Fetch related Patient and Customer documents
+        patient_id = frappe.get_doc('Patient', patient_pharmacy.patient)
+        customer_id = frappe.get_doc('Customer', patient_id.customer)
+        
         # Filter invoices matching the current pharmacy
         matching_invoices = [invoice for invoice in invoices if invoice.custom_pharmacy_id == pharmacy.name]
         
-        # Check the outstanding amounts
-        if all(invoice.outstanding_amount <= 0 for invoice in matching_invoices):
-            patient_pharmacy.payment_status = "Fully Paid"
+        # Check the criteria for updating payment status and creating the Stock Entry
+        if (patient_pharmacy.approval_status != 'Approved To Be Issued' and (
+            customer_id.customer_group == 'Insurance' or 
+            customer_id.custom_bill_status == 'Bill Later' or
+            all(invoice.outstanding_amount <= 0 for invoice in matching_invoices))):
+            
+            # Update payment and approval statuses
+            if customer_id.customer_group == 'Insurance' or customer_id.custom_bill_status == 'Bill Later':
+                patient_pharmacy.payment_status = "Pending Payment"
+            elif all(invoice.outstanding_amount <= 0 for invoice in matching_invoices):
+                patient_pharmacy.payment_status = "Fully Paid"
+            
+            patient_pharmacy.approval_status = 'Approved To Be Issued'
             updated = True
-        elif any(invoice.outstanding_amount > 0 for invoice in matching_invoices):
+            
+            # Create new Stock Entry after updating the payment status
+            se = frappe.new_doc('Stock Entry')
+            se.stock_entry_type = 'Material Issue'
+            se.from_warehouse = patient_pharmacy.store
+            se.remarks = f"{patient_pharmacy.patient} - {patient_pharmacy.name}"
+            se.posting_date = patient_pharmacy.encounter_date
+            se.posting_time = patient_pharmacy.encounter_time
+            se.custom_patient_id = patient_pharmacy.patient
+            se.custom_pharmacy_id = patient_pharmacy.name
+
+            # Add Stock Entry details based on Medication Entry items
+            for item in patient_pharmacy.drug_prescription:
+                item_code = item.drug_code
+                item_doc = frappe.get_doc('Item', item_code)
+                uom = item_doc.stock_uom  # Retrieve the UOM from the Item document
+                
+                se.append('items', {
+                    'item_code': item_code,
+                    'qty': item.qty,
+                    'uom': uom,
+                    'transfer_qty': item.qty,
+                    'cost_center': patient_pharmacy.custom_cost_center
+                })
+
+            se.insert()
+            se.submit()
+        
+        elif (patient_pharmacy.approval_status != 'Approved To Be Issued' and
+              any(invoice.outstanding_amount > 0 for invoice in matching_invoices)):
             patient_pharmacy.payment_status = "Partially Paid"
             updated = True
         

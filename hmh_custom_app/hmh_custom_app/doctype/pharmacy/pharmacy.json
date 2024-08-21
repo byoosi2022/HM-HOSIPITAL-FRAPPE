@@ -198,14 +198,16 @@
    "fieldname": "sales_invoice_id",
    "fieldtype": "Link",
    "label": "Sales Invoice Id",
-   "options": "Sales Invoice"
+   "options": "Sales Invoice",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "payment_status",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Payment Status"
+   "label": "Payment Status",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -218,12 +220,13 @@
    "allow_on_submit": 1,
    "fieldname": "approval_status",
    "fieldtype": "Data",
-   "label": "Approval Status"
+   "label": "Approval Status",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-20 20:25:02.223580",
+ "modified": "2024-08-21 01:00:03.546291",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Pharmacy",
