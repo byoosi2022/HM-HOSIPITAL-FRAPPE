@@ -10,7 +10,9 @@
   "nok_name",
   "phone",
   "relationship",
-  "referal"
+  "referal",
+  "column_break_okge",
+  "back_to_patient_list"
  ],
  "fields": [
   {
@@ -42,11 +44,20 @@
    "in_list_view": 1,
    "label": "NOK Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_okge",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "back_to_patient_list",
+   "fieldtype": "Button",
+   "label": "Back to Patient List"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-21 09:20:56.086283",
+ "modified": "2024-08-23 11:28:12.274971",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Emergency",
