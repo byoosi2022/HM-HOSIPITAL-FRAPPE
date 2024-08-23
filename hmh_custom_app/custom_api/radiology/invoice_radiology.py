@@ -43,7 +43,6 @@ def on_submit(doc, method):
                 custom_due_date = doc.custom_due_date or encounter_date
                 sales_invoice.due_date = max(custom_due_date, encounter_date)
                 
-                # sales_invoice.items = []
             else:
                 # Create a new Sales Invoice
                 sales_invoice = frappe.new_doc("Sales Invoice")
@@ -66,41 +65,47 @@ def on_submit(doc, method):
             has_items_to_add = False
 
             for item in doc.custom_radiology_items:
-                if item.radiology_status == "Fully Paid":
-                    # Skip items that are already paid
-                    continue
-                
-                if not item.item_code or not item.amount:
-                    frappe.log_error(f"Missing data in custom_items: {item.as_dict()}", "Sales Invoice Creation Error")
-                    frappe.throw(_("Missing data for item {0}. Ensure that item code and amount are provided.").format(item.item))
-                
-                # Append item to the Sales Invoice
-                sales_invoice.append("items", {
-                    "item_code": item.item_code,
-                    "qty": 1,
-                    "rate": item.amount,
-                    "cost_center": doc.custom_cost_center,
-                })
-                
-                # Set flag to true if at least one item is added
-                has_items_to_add = True
+                # Only add items that are not fully paid and have not been invoiced yet
+                if item.radiology_status != "Fully Paid" and item.from_sales_invoice != "Invoice Created":
+                    if not item.item_code or not item.amount:
+                        frappe.log_error(f"Missing data in custom_items: {item.as_dict()}", "Sales Invoice Creation Error")
+                        frappe.throw(_("Missing data for item {0}. Ensure that item code and amount are provided.").format(item.item))
+                    
+                    # Append item to the Sales Invoice
+                    sales_invoice.append("items", {
+                        "item_code": item.item_code,
+                        "qty": 1,
+                        "rate": item.amount,
+                        "cost_center": doc.custom_cost_center,
+                    })
+                    
+                    # Set flag to true if at least one item is added
+                    has_items_to_add = True
 
             if not has_items_to_add:
                 # If no items are added, show message and proceed
                 return
-                # frappe.msgprint(_("No valid Lab Tests Investigations found to create an Invoice"), raise_exception=False)
+            
             else:
                 # Save or update the Sales Invoice as a draft
                 sales_invoice.save(ignore_permissions=True)
-                # sales_invoice.submit()
-                frappe.msgprint(_("Please Go to the Reception a Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
+                frappe.msgprint(_("Please Go to the Reception. A Sales Invoice {0} was created/updated successfully.").format(sales_invoice.name))
                 
+                # Update `custom_invoice_status` in the Lab Prescription table
+                for radiology in doc.custom_radiology_items:
+                    if radiology.radiology_status != "Fully Paid" and radiology.from_sales_invoice != "Invoice Created":
+                        radiology.from_sales_invoice = "Invoice Created"
+                doc.save()
+                frappe.db.commit()
+                        
                 investigations = []
-                # Check if the customer group is 'Insurance' and create a Lab Test
+                # Check if the customer group is 'Insurance' and create a Lab Test 
                 if customer.customer_group == "Insurance" or customer.custom_bill_status == "Bill Later":
                     for procedure in doc.custom_radiology_items:
-                        if procedure.radiology_status != "Fully Paid":
+                        if procedure.radiology_status != "Fully Paid" or procedure.from_sales_invoice != "Invoice Created":
                             procedure.radiology_status = "Fully Paid"
+                            procedure.from_sales_invoice = "Invoice Created"
+                            procedure.results_status = "Processing Results"
                             investigations.append(procedure)
                             doc.save()
                             frappe.db.commit()  # Commit changes to the database
@@ -108,12 +113,10 @@ def on_submit(doc, method):
                             procedure_doc = frappe.new_doc('Observation')
                             procedure_doc.observation_template = procedure.radiology_investigation  # Assuming Radiology has a field named lab_test_code
                             procedure_doc.patient = patient_doc
-                            procedure_doc.custom_cost_center = "Radiology - HMH"
                             procedure_doc.invoiced = 1
                             procedure_doc.posting_date = doc.encounter_date
                             procedure_doc.healthcare_practitioner = doc.practitioner
                             procedure_doc.custom_patient_encounter_id = doc.name  # Use the encounter_id passed to the function
-
                             
                             procedure_doc.save()
                             frappe.db.commit()  # Commit changes to the database

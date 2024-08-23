@@ -66,7 +66,7 @@ def on_submit(doc, method):
             has_items_to_add = False
 
             for item in doc.procedure_prescription:
-                if item.custom_procedure_status == "Fully Paid":
+                if item.custom_procedure_status == "Fully Paid" or item.custom_from_sales_invoce == "Invoice Created":
                     # Skip items that are already paid
                     continue
                 
@@ -98,12 +98,21 @@ def on_submit(doc, method):
                 # sales_invoice.submit()
                 frappe.msgprint(_("Sales Invoice {0} created/updated successfully.").format(sales_invoice.name))
                 
+                # Update `custom_invoice_status` in the Lab Prescription table
+                for procede in doc.procedure_prescription:
+                    if procede.custom_procedure_status != "Fully Paid" and procede.custom_from_sales_invoce != "Invoice Created":
+                        procede.custom_from_sales_invoce = "Invoice Created"
+                doc.save()
+                frappe.db.commit()
+                  
                 investigations = []
                 # Check if the customer group is 'Insurance' and create a Lab Test
                 if customer.customer_group == "Insurance" or customer.custom_bill_status == "Bill Later":
                     for procedure in doc.procedure_prescription:
-                        if procedure.custom_procedure_status != "Fully Paid":
+                        if procedure.custom_procedure_status != "Fully Paid" or procedure.custom_from_sales_invoce != "Invoice Created":
                             procedure.custom_procedure_status = "Fully Paid"
+                            procedure.custom_from_sales_invoce = "Invoice Created"
+                            procedure.custom_proceding_status = "Processing Results"
                             investigations.append(procedure)
                             doc.save()
                             frappe.db.commit()  # Commit changes to the database
@@ -111,7 +120,7 @@ def on_submit(doc, method):
                             procedure_doc = frappe.new_doc('Clinical Procedure')
                             procedure_doc.procedure_template = procedure.procedure  # Assuming lab_test has a field named lab_test_code
                             procedure_doc.patient = patient_doc
-                            procedure_doc.custom_cost_center = "Theatre - HMH"
+                            # procedure_doc.custom_cost_center = "Theatre - HMH"
                             procedure_doc.invoiced = 1
                             procedure_doc.start_date = doc.encounter_date
                             procedure_doc.practitioner = doc.practitioner
