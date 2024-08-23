@@ -119,9 +119,9 @@ def on_submit(doc, method):
                             lab_test_doc.invoiced = 1
                             lab_test_doc.save()
                             frappe.db.commit()  # Commit changes to the database
-            else:
+            # else:
                 # If no items are added, show a message
-                frappe.msgprint(_("No items were added to the Sales Invoice."))
+                # frappe.msgprint(_("No items were added to the Sales Invoice."))
 
         except frappe.ValidationError as e:
             frappe.db.rollback()
