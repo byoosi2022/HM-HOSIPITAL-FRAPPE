@@ -120,7 +120,7 @@ def on_submit(doc, method):
                             procedure_doc = frappe.new_doc('Clinical Procedure')
                             procedure_doc.procedure_template = procedure.procedure  # Assuming lab_test has a field named lab_test_code
                             procedure_doc.patient = patient_doc
-                            # procedure_doc.custom_cost_center = "Theatre - HMH"
+                            procedure_doc.custom_cost_center = "Theatre - HMH"
                             procedure_doc.invoiced = 1
                             procedure_doc.start_date = doc.encounter_date
                             procedure_doc.practitioner = doc.practitioner
