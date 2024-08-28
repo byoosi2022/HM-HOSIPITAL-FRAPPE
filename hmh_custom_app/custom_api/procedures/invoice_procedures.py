@@ -116,11 +116,12 @@ def on_submit(doc, method):
                             investigations.append(procedure)
                             doc.save()
                             frappe.db.commit()  # Commit changes to the database
-                              # Create a new Procedure document
+                            #  Create a new Procedure document "Theatre - HMH"
                             procedure_doc = frappe.new_doc('Clinical Procedure')
                             procedure_doc.procedure_template = procedure.procedure  # Assuming lab_test has a field named lab_test_code
                             procedure_doc.patient = patient_doc
                             procedure_doc.custom_cost_center = "Theatre - HMH"
+                            # procedure_doc.custom_cost_center = "0003 - Theatre - BL"
                             procedure_doc.invoiced = 1
                             procedure_doc.start_date = doc.encounter_date
                             procedure_doc.practitioner = doc.practitioner
