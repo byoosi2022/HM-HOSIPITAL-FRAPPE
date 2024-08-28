@@ -266,6 +266,12 @@ fixtures = [
             ["module", "=", "HMH CUSTOM APP"]
         ]
     },
+        {
+        "doctype": "Print Format",
+        "filters": [
+            ["module", "=", "HMH CUSTOM APP"]
+        ]
+    },
 ]
 
 

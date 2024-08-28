@@ -70,6 +70,7 @@
    "fetch_from": "patient.custom_consulting_department",
    "fieldname": "cost_center",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Department",
    "options": "Cost Center"
   },
@@ -80,12 +81,14 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Series",
    "options": "HMHCA-PPM-.YYYY.-"
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Due Date",
    "read_only": 1
   },
@@ -105,6 +108,7 @@
   {
    "fieldname": "company",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Company",
    "options": "Company"
   },
@@ -124,6 +128,7 @@
    "default": "UGX",
    "fieldname": "currency",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Currency",
    "options": "Currency",
    "read_only": 1
@@ -214,7 +219,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-21 11:49:15.614314",
+ "modified": "2024-08-28 16:16:06.763768",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Patient Payment Management",
