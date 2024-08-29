@@ -1,7 +1,7 @@
 frappe.ui.form.on("Patient Encounter", {
     refresh: function(frm) {
         // Check if the document is submitted
-        if (frm.doc.docstatus == 0) {
+        if (frm.doc.docstatus == 0 || frm.doc.docstatus == 1) {
             frm.add_custom_button(
                 __("Print PDF"),
                 function() {
