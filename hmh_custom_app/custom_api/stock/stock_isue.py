@@ -18,7 +18,6 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
     # Create new Stock Entry
     se = frappe.new_doc('Stock Entry')
     se.stock_entry_type = 'Material Issue'
-    se.from_warehouse = warehouse
     se.remarks = f"{patient} - {docname}"
     se.posting_date = posting_date
     se.posting_time = posting_time
@@ -35,15 +34,13 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
         has_batch = frappe.get_value('Item', item_code, 'has_batch_no')
         
         if has_batch:
-            # Get batch with available stock
+            # Get the batch with the highest available quantity
             batch_info = frappe.get_list('Batch', filters={
-                'item': item_code,
-                'warehouse': warehouse,
-                'actual_qty': ['>', 0]
-            }, fields=['name'], limit=1)  # Get the first available batch
+                'item': item_code
+            }, fields=['batch_id', 'batch_qty'], order_by='batch_qty desc', limit=1)  # Get the batch with the most stock
             
             if batch_info:
-                batch_no = batch_info[0]['name']
+                batch_no = batch_info[0]['batch_id']
             else:
                 batch_no = None  # No available batch found
         else:
