@@ -194,7 +194,7 @@ def create_sales_invoice_payments(patient_payment):
 
 
 @frappe.whitelist()
-def get_sales_invoices_with_totals(cost_center=None, posting_date=None, patient=None):
+def get_sales_invoices_with_totals(cost_center=None, posting_date=None, patient=None, customer=None):
     try:
         # Log filter criteria
         frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
@@ -207,6 +207,9 @@ def get_sales_invoices_with_totals(cost_center=None, posting_date=None, patient=
         #     filters["posting_date"] = posting_date
         if patient:
             filters["patient"] = patient
+            
+        if customer:
+            filters["customer"] = customer
 
         # Fetch sales invoices with specified fields
         sales_invoices = frappe.get_all(
@@ -456,7 +459,7 @@ def pay_now(patient):
 
 
 @frappe.whitelist()
-def get_sales_invoices_with_drafts(cost_center=None, posting_date=None, patient=None):
+def get_sales_invoices_with_drafts(cost_center=None, posting_date=None, patient=None, customer=None):
     try:
         # Log filter criteria
         frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
@@ -500,7 +503,7 @@ def get_sales_invoices_with_drafts(cost_center=None, posting_date=None, patient=
         frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))
 
 @frappe.whitelist()
-def get_sales_invoices_with_drafts_itemgroup(cost_center=None, posting_date=None, patient=None):
+def get_sales_invoices_with_drafts_itemgroup(cost_center=None, posting_date=None, patient=None, customer=None):
     try:
         # Log filter criteria
         frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")
@@ -576,7 +579,7 @@ def get_sales_invoices_with_drafts_itemgroup(cost_center=None, posting_date=None
         frappe.throw(_("An error occurred while fetching sales invoices: {}").format(str(e)))
 
 @frappe.whitelist()
-def get_sales_invoices_with_totals_itemgroup(cost_center=None, posting_date=None, patient=None):
+def get_sales_invoices_with_totals_itemgroup(cost_center=None, posting_date=None, patient=None, customer=None):
     try:
         # Log filter criteria
         frappe.logger().info(f"Fetching sales invoices for cost center: {cost_center}, posting date: {posting_date}, and patient: {patient}")

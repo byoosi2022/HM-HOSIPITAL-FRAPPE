@@ -3,7 +3,6 @@
  "allow_rename": 1,
  "creation": "2024-08-23 11:56:32.712035",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "item_code",
@@ -17,11 +16,11 @@
   "rate",
   "gl_entry_name",
   "payment_entry",
-  "journal_date"
+  "journal_date",
+  "quantity"
  ],
  "fields": [
   {
-   "columns": 2,
    "fieldname": "item_code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -33,11 +32,9 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Qty",
-   "permlevel": 1,
-   "print_hide": 1
+   "permlevel": 1
   },
   {
-   "columns": 1,
    "fieldname": "rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -45,14 +42,12 @@
    "print_hide": 1
   },
   {
-   "columns": 2,
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Amount"
   },
   {
-   "columns": 2,
    "fieldname": "paid_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -60,7 +55,6 @@
    "print_hide": 1
   },
   {
-   "columns": 2,
    "fieldname": "running_balance",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -68,7 +62,6 @@
    "print_hide": 1
   },
   {
-   "columns": 1,
    "fieldname": "invoice_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -76,7 +69,6 @@
    "print_hide": 1
   },
   {
-   "columns": 1,
    "fieldname": "invoice_vourcher",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -85,7 +77,6 @@
    "print_hide": 1
   },
   {
-   "columns": 1,
    "fieldname": "payment_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -114,12 +105,18 @@
    "label": "Journal Vourcher",
    "options": "Journal Entry",
    "print_hide": 1
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Quantity"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-08-28 15:12:28.998065",
+ "modified": "2024-08-29 18:49:17.047195",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Invoice Table Statement",
