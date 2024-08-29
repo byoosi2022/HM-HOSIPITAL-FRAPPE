@@ -218,5 +218,16 @@
   "name": "Vitals In meter",
   "script": "frappe.ui.form.on('Vital Signs', {\r\n    custom_height_in_centimeters_: function(frm) {\r\n        // Get the value of height in centimeters\r\n        let height_in_cm = frm.doc.custom_height_in_centimeters_;\r\n\r\n        if (height_in_cm) {\r\n            // Convert height from centimeters to meters\r\n            let height_in_m = height_in_cm / 100;\r\n\r\n            // Set the height in meters in the 'height_in_meters_' field\r\n            frappe.model.set_value(frm.doctype, frm.docname, 'height', height_in_m);\r\n        } else {\r\n            // If the height in centimeters is empty, clear the height in meters\r\n            frappe.model.set_value(frm.doctype, frm.docname, 'height', null);\r\n        }\r\n    },\r\n    onload: function(frm) {\r\n        // Make the height_in_meters_ field read-only\r\n        frm.set_df_property('height', 'read_only', 1);\r\n    }\r\n});\r\n",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Patient Encounter",
+  "enabled": 0,
+  "modified": "2024-08-29 15:45:17.606789",
+  "module": "HMH CUSTOM APP",
+  "name": "Print Pdf",
+  "script": "frappe.ui.form.on(\"Patient Encounter\", {\r\n    refresh: function(frm) {\r\n        // Check if the document is submitted\r\n        if (frm.doc.docstatus == 0 || frm.doc.docstatus == 1) {\r\n            frm.add_custom_button(\r\n                __(\"Print PDF\"),\r\n                function() {\r\n                    // Define the print format name\r\n                    var print_format = \"Patient Medical Report\";\r\n\r\n                    // Generate the URL to download the PDF file using the base URL\r\n                    var base_url = \"/printview\";\r\n                    var url = \r\n                        `${base_url}?doctype=${encodeURIComponent(frm.doc.doctype)}` +\r\n                        `&name=${encodeURIComponent(frm.doc.name)}` +\r\n                        `&format=${encodeURIComponent(print_format)}` +\r\n                        `&no_letterhead=1` + // Set to 1 to disable letterhead; change to 0 to include it\r\n                        `&letterhead=No%20Letterhead` +\r\n                        `&settings={}` +\r\n                        `&_lang=en`;\r\n\r\n                    // Log the URL for debugging\r\n                    console.log(url);\r\n\r\n                    // Open the PDF file in a new tab\r\n                    window.open(url, '_blank');\r\n                },\r\n                __(\"PDF\")\r\n            );\r\n        }\r\n    }\r\n});\r\n\r\n",
+  "view": "Form"
  }
 ]
