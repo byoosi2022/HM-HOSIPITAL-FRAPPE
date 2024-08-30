@@ -50,8 +50,10 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
             'item_code': item_code,
             'qty': item.qty,
             'uom': uom,
+            's_warehouse':warehouse,
             'transfer_qty': item.qty,
             'cost_center': cost_center,
+            'use_serial_batch_fields':1,
             'batch_no': batch_no  # Set the batch number if available
         })
     
