@@ -98,7 +98,6 @@ def create_payments(patient_payment):
             "error": str(e)
         }
 
-
 @frappe.whitelist()
 def create_payments_mode(patient_payment):
     try:
@@ -120,7 +119,7 @@ def create_payments_mode(patient_payment):
         
         patient_doc = frappe.get_doc("Patient", patient)
 
-        # Fetch the exchange rate (Assuming that payment currency is same as invoice currency)
+        # Fetch the exchange rate (Assuming that payment currency is the same as the invoice currency)
         target_exchange_rate = frappe.db.get_value("Currency Exchange", 
                                                    {"from_currency": patie_payment_doc.currency,
                                                     "to_currency": frappe.defaults.get_global_default("default_currency")},
@@ -128,16 +127,26 @@ def create_payments_mode(patient_payment):
         if not target_exchange_rate:
             target_exchange_rate = 1  # Default to 1 if no specific exchange rate is found
 
-        # Create Payment Entries for each mode of payment
-        payment_entries = []
+        # Create a dictionary to group invoices by mode of payment
+        mode_payment_dict = {}
         for mode in patie_payment_doc.cash_items:
+            if mode.mode_of_payment not in mode_payment_dict:
+                mode_payment_dict[mode.mode_of_payment] = []
+            mode_payment_dict[mode.mode_of_payment].append(mode)
+
+        payment_entries = []
+        
+        # Iterate over each mode of payment and create separate payment entries
+        for mode_of_payment, modes in mode_payment_dict.items():
+            total_paid_amount = sum(mode.paid_amount for mode in modes)
+
             # Fetch the default account from the Mode of Payment Account child table
             default_paid_to_account = frappe.db.get_value("Mode of Payment Account", 
-                                                          {"parent": mode.mode_of_payment, "company": patie_payment_doc.company}, 
+                                                          {"parent": mode_of_payment, "company": company}, 
                                                           "default_account")
             if not default_paid_to_account:
                 return {
-                    "error": _("Default account not found for mode of payment {0} and company {1}").format(mode.mode_of_payment, patie_payment_doc.company)
+                    "error": _("Default account not found for mode of payment {0} and company {1}").format(mode_of_payment, company)
                 }
             
             account_currency = frappe.db.get_value("Account", default_paid_to_account, "account_currency")
@@ -148,13 +157,13 @@ def create_payments_mode(patient_payment):
             payment_entry.party = patient_doc.customer
             payment_entry.posting_date = frappe.utils.nowdate()
             payment_entry.company = company
-            payment_entry.paid_amount = mode.paid_amount
-            payment_entry.received_amount = mode.paid_amount
-            payment_entry.reference_no = mode.transaction_id
+            payment_entry.paid_amount = total_paid_amount
+            payment_entry.received_amount = total_paid_amount
+            payment_entry.reference_no = modes[0].transaction_id  # Use the transaction_id from the first mode
             payment_entry.custom_payment_id = patie_payment_doc.name
             payment_entry.reference_date = patie_payment_doc.posting_date
             payment_entry.target_exchange_rate = target_exchange_rate
-            payment_entry.mode_of_payment = mode.mode_of_payment 
+            payment_entry.mode_of_payment = mode_of_payment 
             payment_entry.cost_center = patie_payment_doc.cost_center
 
             # Set required fields
@@ -171,7 +180,7 @@ def create_payments_mode(patient_payment):
                 invoice_aggregation[invoice_item.invoice] += invoice_item.outstanding_amount
 
             # Allocate the payment amount to invoices
-            allocated_amount = mode.paid_amount
+            allocated_amount = total_paid_amount
             for invoice, total_outstanding in invoice_aggregation.items():
                 if allocated_amount <= 0:
                     break
@@ -201,5 +210,4 @@ def create_payments_mode(patient_payment):
         return {
             "error": str(e)
         }
-
 
