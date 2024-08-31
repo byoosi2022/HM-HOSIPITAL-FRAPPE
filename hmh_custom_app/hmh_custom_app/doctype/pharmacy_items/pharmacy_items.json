@@ -12,6 +12,7 @@
   "period",
   "dosage_form",
   "amount",
+  "self_request",
   "column_break_7",
   "qty",
   "rate",
@@ -112,11 +113,17 @@
    "fieldname": "interval",
    "fieldtype": "Int",
    "label": "Interval"
+  },
+  {
+   "default": "0",
+   "fieldname": "self_request",
+   "fieldtype": "Check",
+   "label": "Self Request"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2024-08-28 13:58:51.882532",
+ "modified": "2024-08-31 01:44:39.059938",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Pharmacy Items",

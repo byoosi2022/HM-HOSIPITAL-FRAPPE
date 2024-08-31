@@ -621,13 +621,14 @@ def get_sales_invoices_with_totals_itemgroup(cost_center=None, posting_date=None
             invoice_items = frappe.get_all(
                 "Sales Invoice Item",
                 filters={"parent": invoice["name"]},
-                fields=["item_code", "amount"]
+                fields=["item_code", "amount","custom_self_request"]
             )
 
             # Group items by item group and sum their amounts
             for item in invoice_items:
                 item_group = item["item_code"]
                 amount = item["amount"]
+                self_request = item["custom_self_request"]
 
                 # Check if the item group already exists in the totals list
                 existing_group = next((group for group in item_group_totals if group["item_code"] == item_group and group["invoice_name"] == invoice["name"]), None)
@@ -638,6 +639,7 @@ def get_sales_invoices_with_totals_itemgroup(cost_center=None, posting_date=None
                     item_group_totals.append({
                         "invoice_name": invoice["name"],
                         "item_code": item_group,
+                        "self_request": self_request,
                         "total_amount": amount
                     })
 

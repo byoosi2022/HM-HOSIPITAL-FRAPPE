@@ -272,15 +272,16 @@ function populateInvoiceDetailedItems(frm) {
                 patient: patient
             },
             callback: function(response) {
-                // console.log(response)
+                console.log(response)
                 const item_codes = response.message['Item Group Totals'];
                 const totalOutstandingAmount = response.message['Total Outstanding Amount'];
 
                 if (item_codes && item_codes.length > 0) {
-                    // Add rows to the child table
+                    // Add rows to the child table 
                     item_codes.forEach(item => {
                         let child = frm.add_child('invoice_detailed_items');
                         frappe.model.set_value(child.doctype, child.name, 'item', item.item_code);
+                        frappe.model.set_value(child.doctype, child.name, 'self_request', item.self_request);
                         frappe.model.set_value(child.doctype, child.name, 'invoice', item.invoice_name);
                         frappe.model.set_value(child.doctype, child.name, 'outstanding_amount', item.total_amount);
                        

@@ -169,7 +169,8 @@ doc_events = {
     "Patient Payment Management": {
         "on_submit": [
             "hmh_custom_app.custom_api.patient.create_vital_signs_for_patient_frompayments",
-            # "hmh_custom_app.custom_api.patient.update_patient_bill_status",
+            "hmh_custom_app.custom_api.self_request.request.create_radiology",
+            # apps/hmh_custom_app/hmh_custom_app/custom_api/self_request/request.py
         ]
     }
 }
