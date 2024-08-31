@@ -82,7 +82,7 @@ function populateInvoiceTable(frm) {
                 }
             },
             error: function(error) {
-                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                // frappe.msgprint(__('An error occurred while fetching sales invoices.'));
                 console.error(error);
             }
         });
@@ -209,7 +209,7 @@ function populateInvoiceTableDraftes(frm) {
                 patient: patient
             },
             callback: function(response) {
-                console.log(response)
+                // console.log(response)
                 const invoices = response.message.Invoices;
                 if (invoices && invoices.length > 0) {
                     // Add rows to the child table
@@ -227,7 +227,7 @@ function populateInvoiceTableDraftes(frm) {
                 }
             },
             error: function(error) {
-                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                // frappe.msgprint(__('An error occurred while fetching sales invoices.'));
                 console.error(error);
             }
         });
@@ -272,7 +272,7 @@ function populateInvoiceDetailedItems(frm) {
                 patient: patient
             },
             callback: function(response) {
-                console.log(response)
+                // console.log(response)
                 const item_codes = response.message['Item Group Totals'];
                 const totalOutstandingAmount = response.message['Total Outstanding Amount'];
 
@@ -298,7 +298,7 @@ function populateInvoiceDetailedItems(frm) {
                 }
             },
             error: function(error) {
-                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                // frappe.msgprint(__('An error occurred while fetching sales invoices.'));
                 console.error(error);
             }
         });
@@ -337,7 +337,7 @@ function populateInvoiceDetailedItemsDraftes(frm) {
                 patient: patient
             },
             callback: function(response) {
-                console.log(response);
+                // console.log(response);
                 const invoices = response.message.Invoices;
                 const item_group = response.message['Item Group Totals'];
 
@@ -353,11 +353,11 @@ function populateInvoiceDetailedItemsDraftes(frm) {
                     // Refresh the child table
                     frm.refresh_field('invoice_awaiting');
                 } else {
-                    frappe.msgprint(__('No item group totals found with the given filters.'));
+                    // frappe.msgprint(__('No item group totals found with the given filters.'));
                 }
             },
             error: function(error) {
-                frappe.msgprint(__('An error occurred while fetching sales invoices.'));
+                // frappe.msgprint(__('An error occurred while fetching sales invoices.'));
                 console.error(error);
             }
         });
@@ -387,7 +387,7 @@ function submit_unique_invoices(frm) {
             }
         },
         error: function(err) {
-            frappe.msgprint(__('An error occurred while submitting invoices.'));
+            // frappe.msgprint(__('An error occurred while submitting invoices.'));
             console.error(err);
         }
     });
