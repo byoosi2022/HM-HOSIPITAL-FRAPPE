@@ -237,7 +237,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2024-08-30 17:30:24.592833",
+ "modified": "2024-09-03 13:09:28.273469",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Pharmacy",
@@ -255,6 +255,7 @@
    "read": 1,
    "report": 1,
    "role": "Physician",
+   "select": 1,
    "share": 1,
    "submit": 1,
    "write": 1

@@ -24,6 +24,9 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
     se.custom_patient_id = patient
     se.custom_pharmacy_id = docname
     
+    # Check if negative stock is allowed
+    allow_negative_stock = frappe.db.get_single_value('Stock Settings', 'allow_negative_stock')
+    
     # Add Stock Entry details based on Medication Entry items
     for item in pharmacy.drug_prescription:
         item_code = item.drug_code
@@ -50,13 +53,17 @@ def create_stock_entry(docname, warehouse, posting_date, posting_time, patient, 
             'item_code': item_code,
             'qty': item.qty,
             'uom': uom,
-            's_warehouse':warehouse,
+            's_warehouse': warehouse,
             'transfer_qty': item.qty,
             'cost_center': cost_center,
-            'use_serial_batch_fields':1,
+            'use_serial_batch_fields': 1,
             'batch_no': batch_no  # Set the batch number if available
         })
     
+    if allow_negative_stock:
+        frappe.db.set_value('Stock Entry', se.name, 'allow_negative_stock', 1)  # Ensure negative stock is allowed for this Stock Entry
+
     se.insert()
     se.submit()
+    
     return {'status': 'created', 'name': se.name}
