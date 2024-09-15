@@ -13,6 +13,7 @@
   "column_break_equs",
   "patient_name",
   "to",
+  "sex",
   "section_break_vhby",
   "report_details"
  ],
@@ -64,11 +65,16 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "HLC-LTR-.YYYY.-"
+  },
+  {
+   "fieldname": "sex",
+   "fieldtype": "Data",
+   "label": "Sex"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-14 15:43:51.248651",
+ "modified": "2024-09-14 18:09:15.567778",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Lab Test Report",
