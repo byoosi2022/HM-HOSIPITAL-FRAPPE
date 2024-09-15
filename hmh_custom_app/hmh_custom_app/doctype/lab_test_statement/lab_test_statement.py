@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class LabTestReport(Document):
+class LabTestStatement(Document):
 	pass

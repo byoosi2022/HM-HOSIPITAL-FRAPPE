@@ -3,6 +3,15 @@ from collections import defaultdict
 
 @frappe.whitelist()
 def fetch_patient_labtest(patient):
+    # List of lab test templates to filter on
+    test_templates = [
+        "H pylori Antigen test", "Hepatitis C Test", "URINE TB LAM", "Blood grouping-Test",
+        "Blood slide(B/S) for Mps -Test", "Brucella Agglutination Test(BAT)-Test", "H. Pylori Antibody Test",
+        "Hb Estimation-Test", "HBA1C- Test", "HBsAg-Test", "HIV test", "Malaria-MRDT Test",
+        "Pregnancy test (Serum HCG)- Test", "Pregnancy test (urine HCG)-Test", "Prostate Specific Antigen (PSA)-Test",
+        "Random blood sugar (RBS)-Test", "Rheumatoid Factor-Test", "RPR/VDRL-Test", "Sickle scan-Test", "Typhoid test"
+    ]
+    
     # Fetch the patient document
     patient_doc = frappe.get_doc('Patient', patient)
     
@@ -15,10 +24,10 @@ def fetch_patient_labtest(patient):
     if not patient_reg:
         return {"message": "Patient Registration not found."}
 
-    # Fetch all lab tests associated with the patient
+    # Fetch all lab tests associated with the patient and filter by the specified templates
     lab_tests = frappe.get_all('Lab Test', 
-                                filters={'patient': patient}, 
-                                fields=['name', 'practitioner_name', 'employee', 'template', 'creation'])
+                                filters={'patient': patient, 'template': ['in', test_templates]}, 
+                                fields=['name', 'practitioner_name', 'employee','employee_name', 'template', 'creation'])
 
     # Dictionary to group tests by date, practitioner, employee, and template
     grouped_tests = defaultdict(lambda: defaultdict(lambda: {
@@ -42,6 +51,7 @@ def fetch_patient_labtest(patient):
                 "result_value": normal_test.result_value,
                 "practitioner_name": test.get('practitioner_name'),
                 "employee": test.get('employee'),
+                "employee_name": test.get('employee_name'),
                 "template": test.get('template')
             })
         
@@ -52,6 +62,7 @@ def fetch_patient_labtest(patient):
                 "result_value": descriptive_test.result_value,
                 "practitioner_name": test.get('practitioner_name'),
                 "employee": test.get('employee'),
+                "employee_name": test.get('employee_name'),
                 "template": test.get('template')
             })
 
@@ -62,6 +73,7 @@ def fetch_patient_labtest(patient):
                 "colony_population": organism_test.colony_population,
                 "practitioner_name": test.get('practitioner_name'),
                 "employee": test.get('employee'),
+                "employee_name": test.get('employee_name'),
                 "template": test.get('template')
             })
 

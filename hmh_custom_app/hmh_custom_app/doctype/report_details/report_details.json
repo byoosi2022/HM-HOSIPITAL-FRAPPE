@@ -6,15 +6,15 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "doctor",
-  "lab_technician",
+  "doctor_name",
+  "lab_technician_name",
   "date",
-  "time",
   "test_name",
   "result_value",
   "column_break_byge",
-  "doctor_name",
-  "lab_technician_name"
+  "doctor",
+  "lab_technician",
+  "time"
  ],
  "fields": [
   {
@@ -25,24 +25,24 @@
    "label": "Date"
   },
   {
-   "columns": 1,
    "fieldname": "time",
    "fieldtype": "Time",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Time"
   },
   {
-   "columns": 2,
    "fieldname": "doctor",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Doctor",
    "options": "Healthcare Practitioner"
   },
   {
-   "columns": 2,
    "fieldname": "lab_technician",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Lab Technician",
    "options": "Employee"
   },
@@ -82,7 +82,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-14 15:52:41.279408",
+ "modified": "2024-09-15 17:33:42.446144",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
  "name": "Report Details",

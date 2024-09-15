@@ -8,11 +8,9 @@
  "field_order": [
   "naming_series",
   "patient",
-  "from",
   "age",
   "column_break_equs",
   "patient_name",
-  "to",
   "sex",
   "section_break_vhby",
   "report_details"
@@ -35,16 +33,6 @@
    "fieldname": "age",
    "fieldtype": "Data",
    "label": "Age"
-  },
-  {
-   "fieldname": "from",
-   "fieldtype": "Date",
-   "label": "From"
-  },
-  {
-   "fieldname": "to",
-   "fieldtype": "Date",
-   "label": "To"
   },
   {
    "fieldname": "column_break_equs",
@@ -74,10 +62,10 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-14 18:09:15.567778",
+ "modified": "2024-09-15 17:41:34.458672",
  "modified_by": "Administrator",
  "module": "HMH CUSTOM APP",
- "name": "Lab Test Report",
+ "name": "Lab Test Statement",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
