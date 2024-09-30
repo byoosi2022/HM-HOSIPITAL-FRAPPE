@@ -4,6 +4,7 @@ app_publisher = "Paul Mututa"
 app_description = "All the customization of HM Hospital"
 app_email = "mututapaul02@gmail.com"
 app_license = "mit"
+# from hmh_custom_app.custom_api.later_payments.view_logs import grant_view_permission_to_all_users
 # required_apps = []
 
 # Includes in <head>
@@ -127,6 +128,12 @@ doctype_js = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
 
+# Override the Notification Log class
+override_doctype_class = {
+    "Notification Log": "hmh_custom_app.custom_api.later_payments.view_logs.CustomNotificationLog"
+}
+
+
 # Document Events
 # ---------------
 # Hook on document methods and events
@@ -147,6 +154,10 @@ doc_events = {
         ],
         # "validate": "hmh_custom_app.custom_api.patient.validate_patient"
     },
+
+    #  "Notification Requests": {
+    #     "after_insert": grant_view_permission_to_all_users
+    # },
     
     "Patient Encounter": {
         "on_update": [
